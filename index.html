@@ -2,16 +2,12 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<link rel="icon" href="images/logo-1.png">
+	<link class="icon" href="images/logo-1.png">
 <title>TKL Computer</title>
-<!-- for-mobile-apps -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="keywords" content="TKL Store, Computer Store, TKL Computer Store, Computer Shop, TKL Computer Shop, TKL Shop" />
-<!-- //for-mobile-apps -->
 <link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
-<!-- Custom Theme files -->
 <link href="css/style.css" rel='stylesheet' type='text/css' />
-<!-- custom fontawesome -->
 <script src="js/jquery-1.11.1.min.js"></script>
 
 </script>
@@ -133,8 +129,7 @@
 </div>
 
 <script src="./js/LoginStatus.js"></script>
-  <!---->
-<div class="banner-bg">
+  <div class="banner-bg">
     <div class="container">
 		<div class="banner-info">
 			<h3></h3>
@@ -148,7 +143,6 @@
     </div>
 </div>
 
-<!--content-->
 <div class="content-top ">
 	<div class="container ">
 		<div class="spec ">
@@ -468,10 +462,7 @@
 	</div>
 </div>
 
-<!--content-->
-	<!-- ImageSlider -->
-    <div id="myCarousel" class="carousel slide" data-ride="carousel">
-      <!-- Indicators -->
+<div id="myCarousel" class="carousel slide" data-ride="carousel">
       <ol class="carousel-indicators">
         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
         <li data-target="#myCarousel" data-slide-to="1"></li>
@@ -484,7 +475,7 @@
         </div>
         <div class="item">
          <a href="gaminggear.html"> <img class="second-slide " src="images/ps51.jpg" alt="Second slide"></a>
-         
+          
         </div>
         <div class="item">
           <a href="pages/gpu.html"><img class="third-slide " src="images/rtx.jpg" alt="Third slide"></a>
@@ -492,10 +483,7 @@
         </div>
       </div>
     </div>
- 	<!-- ImageSlider -->
-
-<!--content-->
-	<div class="product">
+ 	<div class="product">
 		<div class="container">
 			<div class="spec ">
 				<h3>Sale</h3>
@@ -565,7 +553,7 @@
 											<div class="clearfix"></div>
 										</div>
                                         <div class="add add-2">
-                                       <button class="btn btn-danger my-cart-btn my-cart-b" data-id="14" data-name="ROG Strix GeForce RTX 2080 Ti OC" data-summary="summary 5" data-price="36,990,000" data-quantity="1" data-image="images/gpu/of4.png">Add to Cart</button>
+                                       		<button class="btn btn-danger my-cart-btn my-cart-b" data-id="14" data-name="ROG Strix GeForce RTX 2080 Ti OC" data-summary="summary 5" data-price="36,990,000" data-quantity="1" data-image="images/gpu/of4.png">Add to Cart</button>
                                     </div>
 									</div>
 								</div>
@@ -684,7 +672,6 @@
 		</div>
 	</div>
 	<script src="js/addandcart.js"></script>
-<!--footer-->
 <div class="footer">
 	<div class="container">
 		<div class="col-md-3 footer-grid">
@@ -743,10 +730,37 @@
 			</div>
 	</div>
 </div>
-<!-- to top btn-->
-	<a href="#" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
-<!-- for bootstrap working -->
-		<script src="js/bootstrap.js"></script>
-<!-- for bootstrap working -->
-	</body>
+<a href="#" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
+<script src="js/bootstrap.js"></script>
+
+<!-- CHATBOT SECTION - MÀU XANH DƯƠNG NHẠT #2563eb -->
+<div class="chatbot-sucvn" style="position: fixed; bottom: 20px; right: 20px; z-index: 99999; font-family: Arial, sans-serif;">
+    
+    <div class="chat-header-btn" onclick="toggleChat()" style="background: #2563eb; color: white; padding: 12px 20px; border-radius: 25px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 8px;">
+        💬 Tư vấn linh kiện AI
+    </div>
+
+    <div class="chat-body" id="chatBody" style="display: none; flex-direction: column; position: absolute; bottom: 60px; right: 0; width: 350px; height: 450px; background: white; border: 1px solid #e2e8f0; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); overflow: hidden;">
+        
+        <div style="background: #2563eb; color: white; padding: 16px; font-weight: bold; font-size: 16px; text-align: center; border-bottom: 1px solid #1e4bb3;">
+            Trợ lý AI - TKL Computer
+        </div>
+        
+        <div id="chatContent" style="flex: 1; overflow-y: auto; padding: 16px; background: #f8fafc; display: flex; flex-direction: column;">
+            <div style="text-align: left; margin-bottom: 12px;">
+                <span style="background: #f1f5f9; color: #334155; padding: 8px 14px; border-radius: 16px 16px 16px 0; display: inline-block; max-width: 75%; font-size: 14px;">
+                    <b>Bot:</b> Chào bạn! Mình là Trợ lý AI của TKL Computer. Bạn cần tư vấn linh kiện PC hay cấu hình máy thế nào để mình hỗ trợ nhé?
+                </span>
+            </div>
+        </div>
+
+        <div style="padding: 12px; border-top: 1px solid #e2e8f0; background: white; display: flex; gap: 8px; align-items: center;">
+            <input type="text" id="chatInput" placeholder="Hỏi AI về CPU, GPU, cấu hình..." style="flex: 1; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 20px; outline: none; font-size: 14px; color: #333;">
+            <button onclick="sendMessage()" style="background: #2563eb; color: white; border: none; padding: 10px 16px; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 14px;">Gửi</button>
+        </div>
+    </div>
+</div>
+
+<script src="js/chatbot.js"></script>
+</body>
 </html>
