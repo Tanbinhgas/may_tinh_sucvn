@@ -505,6 +505,10 @@ ul.nav.tabs {
 .mid-2 p em{
 	font-style:normal;
 }
+.mid-2 p label + em.item_price {
+	color: #ff6b6b;
+	font-weight: 700;
+}
 .mid-2 p label{
 	text-decoration: line-through;
 	font-weight:400;
