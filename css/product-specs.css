@@ -1,0 +1,259 @@
+/* Product Specifications and Description Styles */
+
+/* Product Specifications Container */
+.product-specs-container {
+    background: #fff;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 2em;
+    margin-bottom: 2em;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.specs-header {
+    border-bottom: 2px solid #FAB005;
+    padding-bottom: 1em;
+    margin-bottom: 1.5em;
+}
+
+.specs-header h3 {
+    color: #000;
+    font-size: 1.5em;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Specifications Table */
+.specs-table-wrapper {
+    overflow-x: auto;
+}
+
+.specs-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+.specs-table tbody tr {
+    border-bottom: 1px solid #E5E7EB;
+    transition: background-color 0.3s ease;
+}
+
+.specs-table tbody tr:hover {
+    background-color: #F9FAFB;
+}
+
+.specs-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.specs-label {
+    width: 35%;
+    padding: 1em;
+    font-weight: 600;
+    color: #374151;
+    background-color: #F3F4F6;
+    font-size: 0.95em;
+}
+
+.specs-value {
+    width: 65%;
+    padding: 1em;
+    color: #1F2937;
+    font-size: 0.95em;
+}
+
+.specs-value strong {
+    color: #039445;
+}
+
+/* Product Description Container */
+.product-description-container {
+    background: #fff;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 2em;
+    margin-bottom: 2em;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.description-header {
+    border-bottom: 2px solid #039445;
+    padding-bottom: 1em;
+    margin-bottom: 1.5em;
+}
+
+.description-header h3 {
+    color: #000;
+    font-size: 1.5em;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Description Content */
+.description-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2em;
+}
+
+.description-main h4,
+.description-highlights h4,
+.description-additional h4 {
+    color: #1F2937;
+    font-size: 1.2em;
+    font-weight: 600;
+    margin-bottom: 1em;
+    margin-top: 0;
+}
+
+.description-text {
+    line-height: 1.8;
+    color: #4B5563;
+}
+
+.description-text p {
+    margin-bottom: 1em;
+}
+
+.description-text p:last-child {
+    margin-bottom: 0;
+}
+
+/* Highlights List */
+.highlights-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.highlights-list li {
+    padding: 0.75em 0;
+    color: #374151;
+    font-size: 0.95em;
+    display: flex;
+    align-items: center;
+    line-height: 1.6;
+}
+
+.highlights-list li::before {
+    content: '';
+    display: inline-block;
+    margin-right: 0.75em;
+    flex-shrink: 0;
+}
+
+/* Additional Info */
+.additional-info {
+    background-color: #F9FAFB;
+    padding: 1.5em;
+    border-radius: 6px;
+    border-left: 4px solid #FAB005;
+}
+
+.additional-info p {
+    margin-bottom: 0.75em;
+    color: #4B5563;
+    font-size: 0.95em;
+    line-height: 1.6;
+}
+
+.additional-info p:last-child {
+    margin-bottom: 0;
+}
+
+.additional-info strong {
+    color: #1F2937;
+    font-weight: 600;
+}
+
+.additional-info span {
+    color: #039445;
+    font-weight: 500;
+}
+
+/* Modal Styles for Product Details */
+.modal-header-specs {
+    background: linear-gradient(135deg, #039445 0%, #FAB005 100%);
+    color: white;
+    padding: 1.5em;
+    border-radius: 8px 8px 0 0;
+    margin-bottom: 1em;
+}
+
+.modal-header-specs h2 {
+    margin: 0;
+    font-size: 1.8em;
+    font-weight: 700;
+}
+
+.modal-header-specs .product-price {
+    color: #FCCD1E;
+    font-size: 1.3em;
+    margin-top: 0.5em;
+    font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .product-specs-container,
+    .product-description-container {
+        padding: 1.5em;
+    }
+
+    .specs-table {
+        font-size: 0.9em;
+    }
+
+    .specs-label {
+        width: 40%;
+        padding: 0.75em;
+    }
+
+    .specs-value {
+        width: 60%;
+        padding: 0.75em;
+    }
+
+    .description-content {
+        grid-template-columns: 1fr;
+        gap: 1.5em;
+    }
+
+    .specs-header h3,
+    .description-header h3 {
+        font-size: 1.3em;
+    }
+
+    .description-main h4,
+    .description-highlights h4,
+    .description-additional h4 {
+        font-size: 1.1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-specs-container,
+    .product-description-container {
+        padding: 1em;
+        margin-bottom: 1em;
+    }
+
+    .specs-table {
+        font-size: 0.85em;
+    }
+
+    .specs-label,
+    .specs-value {
+        padding: 0.6em;
+    }
+
+    .specs-header h3,
+    .description-header h3 {
+        font-size: 1.2em;
+    }
+
+    .additional-info {
+        padding: 1em;
+    }
+}
