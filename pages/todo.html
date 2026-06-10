@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ứng dụng To-Do List - TKL Computer</title>
+    <link href="../css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../css/todo-style.css" rel="stylesheet" type="text/css" />
+    <link href="../css/font-awesome.css" rel="stylesheet">
+    <link href='//fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Noto+Sans:400,700' rel='stylesheet' type='text/css'>
+</head>
+<body>
+    <div class="todo-container">
+        <!-- Header -->
+        <header class="todo-header">
+            <div class="header-content">
+                <h1><i class="fa fa-check-square"></i> Quản Lý Công Việc (To-Do List)</h1>
+                <p>Tổ chức công việc hàng ngày của bạn một cách hiệu quả</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="todo-main">
+            <div class="todo-wrapper">
+                <!-- Input Section -->
+                <div class="input-section">
+                    <div class="input-group">
+                        <input 
+                            type="text" 
+                            id="todoInput" 
+                            class="todo-input" 
+                            placeholder="Nhập công việc cần làm..."
+                            autocomplete="off"
+                        >
+                        <button id="addBtn" class="add-btn">
+                            <i class="fa fa-plus"></i> Thêm
+                        </button>
+                    </div>
+                    
+                    <!-- Quick Add Buttons -->
+                    <div class="quick-buttons">
+                        <button class="quick-btn" data-priority="high">
+                            <i class="fa fa-exclamation-circle"></i> Ưu tiên cao
+                        </button>
+                        <button class="quick-btn" data-priority="medium">
+                            <i class="fa fa-circle"></i> Bình thường
+                        </button>
+                        <button class="quick-btn" data-priority="low">
+                            <i class="fa fa-circle-o"></i> Ưu tiên thấp
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tabs & Filters -->
+                <div class="filter-section">
+                    <div class="tabs">
+                        <button class="tab-btn active" data-filter="all">
+                            <i class="fa fa-list"></i> Tất cả
+                        </button>
+                        <button class="tab-btn" data-filter="active">
+                            <i class="fa fa-clock-o"></i> Đang làm <span class="badge" id="activeBadge">0</span>
+                        </button>
+                        <button class="tab-btn" data-filter="completed">
+                            <i class="fa fa-check"></i> Hoàn thành <span class="badge" id="completedBadge">0</span>
+                        </button>
+                        <button class="tab-btn" data-filter="high">
+                            <i class="fa fa-exclamation-circle" style="color: #e74c3c;"></i> Ưu tiên cao
+                        </button>
+                    </div>
+                    
+                    <div class="sort-search">
+                        <input 
+                            type="text" 
+                            id="searchInput" 
+                            class="search-input" 
+                            placeholder="Tìm kiếm công việc..."
+                        >
+                        <select id="sortSelect" class="sort-select">
+                            <option value="newest">Mới nhất</option>
+                            <option value="oldest">Cũ nhất</option>
+                            <option value="priority">Ưu tiên</option>
+                            <option value="name">Tên (A-Z)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Todo List -->
+                <div class="todos-section">
+                    <ul id="todoList" class="todo-list">
+                        <!-- Todos will be inserted here by JavaScript -->
+                    </ul>
+                    
+                    <!-- Empty State -->
+                    <div id="emptyState" class="empty-state">
+                        <i class="fa fa-inbox"></i>
+                        <p>Không có công việc nào</p>
+                        <span>Thêm công việc mới để bắt đầu</span>
+                    </div>
+                </div>
+
+                <!-- Statistics -->
+                <div class="stats-section">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #3498db;">
+                            <i class="fa fa-list"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Tổng công việc</span>
+                            <span class="stat-value" id="totalStats">0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #27ae60;">
+                            <i class="fa fa-check"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Hoàn thành</span>
+                            <span class="stat-value" id="completedStats">0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #e74c3c;">
+                            <i class="fa fa-exclamation-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Ưu tiên cao</span>
+                            <span class="stat-value" id="priorityStats">0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #f39c12;">
+                            <i class="fa fa-percent"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Hoàn thành (%)</span>
+                            <span class="stat-value" id="percentStats">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="action-buttons">
+                    <button id="clearCompletedBtn" class="action-btn action-btn-danger">
+                        <i class="fa fa-trash"></i> Xóa hoàn thành
+                    </button>
+                    <button id="clearAllBtn" class="action-btn action-btn-danger">
+                        <i class="fa fa-exclamation-triangle"></i> Xóa tất cả
+                    </button>
+                    <button id="exportBtn" class="action-btn action-btn-info">
+                        <i class="fa fa-download"></i> Xuất dữ liệu
+                    </button>
+                    <button id="importBtn" class="action-btn action-btn-info">
+                        <i class="fa fa-upload"></i> Nhập dữ liệu
+                    </button>
+                    <input type="file" id="fileInput" style="display: none;" accept=".json">
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="todo-footer">
+            <p>© 2024 TKL Computer - To-Do List Application | Lưu trữ dữ liệu trên trình duyệt</p>
+        </footer>
+    </div>
+
+    <!-- Modal for Editing Todo -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Chỉnh sửa công việc</h2>
+                <button class="modal-close" id="closeModal">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="editInput">Tiêu đề:</label>
+                    <input type="text" id="editInput" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="editDescription">Mô tả:</label>
+                    <textarea id="editDescription" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editPriority">Ưu tiên:</label>
+                    <select id="editPriority" class="form-control">
+                        <option value="low">Ưu tiên thấp</option>
+                        <option value="medium">Bình thường</option>
+                        <option value="high">Ưu tiên cao</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editDeadline">Hạn chót:</label>
+                    <input type="date" id="editDeadline" class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelEditBtn" class="btn btn-secondary">
+                    Hủy
+                </button>
+                <button id="saveEditBtn" class="btn btn-primary">
+                    Lưu thay đổi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="../js/todo-app.js"></script>
+</body>
+</html>
