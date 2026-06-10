@@ -14,6 +14,7 @@ $cartItems = $stmt->fetchAll();
 $total = array_reduce($cartItems, fn($sum, $i) => $sum + $i['price'] * $i['quantity'], 0);
 
 // ── XỬ LÝ ĐẶT HÀNG ─────────────────────────────────────────
+// Bùi Minh Tú xử lý đặt hàng (week3) 3.2
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $phone   = trim($_POST['phone']   ?? '');
     $address = trim($_POST['address'] ?? '');
