@@ -54,7 +54,7 @@ img.img-head {
 .hyper:hover:after {
 	left: 5%;
     opacity: 1;
-}
+} <!-- Tuần 4-1 : Chỉnh sửa màu sắc của trang web -->
 .hyper:before {
   opacity: 0;
   content: '';
@@ -553,7 +553,7 @@ ul.nav.tabs {
     line-height: 0em !important;
     font-size: 0.9em !important;
     padding: 7px;
-}
+} <!-- Tuần 4-1: Chỉnh sửa màu chữ sale -->
 .offer span{
     color: #fff;
     font-size: 11px;
