@@ -56,7 +56,7 @@ if ($action === 'add') {
 }
 
 // ── CẬP NHẬT SỐ LƯỢNG ──────────────────────────────────────
-if ($action === 'update') {
+if ($action === 'update') {                  <!-- update số lượng -->
     $product_id = trim($_POST['product_id'] ?? '');
     $quantity   = (int)($_POST['quantity']  ?? 0);
 
@@ -76,7 +76,7 @@ if ($action === 'update') {
 }
 
 // ── XOÁ 1 SẢN PHẨM ─────────────────────────────────────────
-if ($action === 'remove') {
+if ($action === 'remove') {                       	<!-- xóa sản phẩm -->
     $product_id = trim($_POST['product_id'] ?? '');
     $pdo->prepare("DELETE FROM cart WHERE user_id = ? AND product_id = ?")->execute([$uid, $product_id]);
 
