@@ -68,7 +68,7 @@ if ($action === 'update') {
     }
 
     // Tính lại tổng
-    $total = $pdo->prepare("SELECT COALESCE(SUM(price * quantity), 0) FROM cart WHERE user_id = ?");
+    $total = $pdo->prepare("SELECT COALESCE(SUM(price * quantity), 0) FROM cart WHERE user_id = ?");   	<!-- Tính tổng tiền đơn hàng -->
     $total->execute([$uid]);
 
     echo json_encode(['success' => true, 'total' => $total->fetchColumn()]);
