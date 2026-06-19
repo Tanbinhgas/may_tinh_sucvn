@@ -1,6 +1,6 @@
 <?php
 // ============================================================
-//  api_cart.php - API giỏ hàng (có kiểm tra tồn kho)
+//  api_cart.php - API giỏ hàng, kiểm tra tồn kho
 // ============================================================
 
 header('Content-Type: application/json; charset=utf-8');
