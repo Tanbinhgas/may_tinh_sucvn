@@ -1,20 +1,16 @@
 <?php
 require_once __DIR__ . '/auth.php';
-$user = requireLogin(); // chưa đăng nhập → redirect login
+$user = requireLogin();
 require_once __DIR__ . '/db.php';
 
 $msg = '';
 
-// Lấy giỏ hàng
 $stmt = $pdo->prepare("SELECT * FROM cart WHERE user_id = ? ORDER BY updated_at DESC");
 $stmt->execute([$user['id']]);
 $cartItems = $stmt->fetchAll();
 
-// Tính tổng
 $total = array_reduce($cartItems, fn($sum, $i) => $sum + $i['price'] * $i['quantity'], 0);
 
-// ── XỬ LÝ ĐẶT HÀNG ─────────────────────────────────────────
-// Bùi Minh Tú xử lý đặt hàng (week3) 3.2
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $phone   = trim($_POST['phone']   ?? '');
     $address = trim($_POST['address'] ?? '');
@@ -25,33 +21,75 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (empty($cartItems)) {
         $msg = ['type' => 'error', 'text' => 'Giỏ hàng trống, không thể đặt hàng.'];
     } else {
-        // Tạo đơn hàng
-        $pdo->prepare("
-            INSERT INTO orders (user_id, total_price, shipping_address, phone, note, status)
-            VALUES (?, ?, ?, ?, ?, 'pending')
-        ")->execute([$user['id'], $total, $address, $phone, $note]);
+        // Kiểm tra tồn kho
+        $stockErrors = [];
+        $stockStmt = $pdo->prepare("SELECT stock FROM products WHERE id = ?");
 
-        $orderId = $pdo->lastInsertId();
-
-        // Lưu chi tiết đơn hàng
-        $itemStmt = $pdo->prepare("
-            INSERT INTO order_items (order_id, product_id, product_name, price, quantity)
-            VALUES (?, ?, ?, ?, ?)
-        ");
         foreach ($cartItems as $item) {
-            $itemStmt->execute([$orderId, $item['product_id'], $item['name'], $item['price'], $item['quantity']]);
+            $stockStmt->execute([$item['product_id']]);
+            $stock = $stockStmt->fetchColumn();
+
+            if ($stock === false) {
+                $stockErrors[] = "Sản phẩm '{$item['name']}' không tồn tại trong hệ thống.";
+            } elseif ($item['quantity'] > $stock) {
+                $stockErrors[] = "Sản phẩm '{$item['name']}' chỉ còn $stock sản phẩm trong kho. Bạn đang đặt {$item['quantity']}.";
+            }
         }
 
-        // Xoá giỏ hàng
-        $pdo->prepare("DELETE FROM cart WHERE user_id = ?")->execute([$user['id']]);
+        if (!empty($stockErrors)) {
+            $msg = ['type' => 'error', 'text' => implode('<br>', $stockErrors)];
+        } else {
+            $pdo->beginTransaction();
 
-        // Redirect trang thành công
-        header("Location: /may_tinh_sucvn/php/order_success.php?id=$orderId");
-        exit;
+            try {
+                $pdo->prepare("
+                    INSERT INTO orders (user_id, total_price, shipping_address, phone, note, status)
+                    VALUES (?, ?, ?, ?, ?, 'pending')
+                ")->execute([$user['id'], $total, $address, $phone, $note]);
+
+                $orderId = $pdo->lastInsertId();
+
+                $itemStmt = $pdo->prepare("
+                    INSERT INTO order_items (order_id, product_id, product_name, price, quantity)
+                    VALUES (?, ?, ?, ?, ?)
+                ");
+
+                $updateStockStmt = $pdo->prepare("
+                    UPDATE products 
+                    SET stock = stock - ? 
+                    WHERE id = ?
+                ");
+
+                foreach ($cartItems as $item) {
+                    $itemStmt->execute([
+                        $orderId,
+                        $item['product_id'],
+                        $item['name'],
+                        $item['price'],
+                        $item['quantity']
+                    ]);
+
+                    $updateStockStmt->execute([
+                        $item['quantity'],
+                        $item['product_id']
+                    ]);
+                }
+
+                $pdo->prepare("DELETE FROM cart WHERE user_id = ?")->execute([$user['id']]);
+
+                $pdo->commit();
+
+                header("Location: /may_tinh_sucvn/php/order_success.php?id=$orderId");
+                exit;
+
+            } catch (Exception $e) {
+                $pdo->rollBack();
+                $msg = ['type' => 'error', 'text' => 'Có lỗi xảy ra khi đặt hàng: ' . $e->getMessage()];
+            }
+        }
     }
 }
 
-// Lấy thông tin user để điền sẵn
 $userInfo = $pdo->prepare("SELECT * FROM users WHERE id = ?");
 $userInfo->execute([$user['id']]);
 $userInfo = $userInfo->fetch();
@@ -71,7 +109,6 @@ $userInfo = $userInfo->fetch();
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="header">
     <div class="container">
         <div class="logo">
@@ -86,7 +123,6 @@ $userInfo = $userInfo->fetch();
     </div>
 </div>
 
-<!-- NỘI DUNG -->
 <div class="checkout-wrapper">
     <div class="container">
         <h2 class="checkout-title"><i class="fa fa-shopping-cart"></i> Xác nhận đơn hàng</h2>
@@ -104,8 +140,6 @@ $userInfo = $userInfo->fetch();
         <?php else: ?>
 
         <div class="checkout-grid">
-
-            <!-- CỘT TRÁI: Form thông tin -->
             <div class="checkout-form-col">
                 <div class="checkout-card">
                     <h3><i class="fa fa-map-marker"></i> Thông tin giao hàng</h3>
@@ -147,7 +181,6 @@ $userInfo = $userInfo->fetch();
                 </div>
             </div>
 
-            <!-- CỘT PHẢI: Tóm tắt đơn hàng -->
             <div class="checkout-summary-col">
                 <div class="checkout-card">
                     <h3><i class="fa fa-list"></i> Đơn hàng của bạn (<?= count($cartItems) ?> sản phẩm)</h3>
@@ -192,7 +225,6 @@ $userInfo = $userInfo->fetch();
     </div>
 </div>
 
-<!-- FOOTER đơn giản -->
 <div class="footer-checkout">
     <p>© 2024 TKL Computer. All rights reserved.</p>
 </div>

@@ -1,16 +1,15 @@
 <?php
 // ============================================================
-//  api_cart.php - API giỏ hàng
-//  Thay thế localStorage bằng MySQL
+//  api_cart.php - API giỏ hàng (có kiểm tra tồn kho)
 // ============================================================
 
 header('Content-Type: application/json; charset=utf-8');
 require_once __DIR__ . '/auth.php';
+require_once __DIR__ . '/db.php';
 
 $user = getCurrentUser();
 $action = $_POST['action'] ?? $_GET['action'] ?? '';
 
-// ── CHƯA ĐĂNG NHẬP ─────────────────────────────────────────
 if (!$user) {
     echo json_encode(['success' => false, 'message' => 'Vui lòng đăng nhập để dùng giỏ hàng.', 'require_login' => true]);
     exit;
@@ -18,11 +17,28 @@ if (!$user) {
 
 $uid = $user['id'];
 
-// ── LẤY GIỎ HÀNG ───────────────────────────────────────────
+// ── LẤY GIỎ HÀNG (kèm stock) ──────────────────────────────
 if ($action === 'get') {
-    $items = $pdo->prepare("SELECT * FROM cart WHERE user_id = ? ORDER BY updated_at DESC");
+    $items = $pdo->prepare("
+        SELECT c.*, p.stock 
+        FROM cart c 
+        LEFT JOIN products p ON c.product_id = p.id 
+        WHERE c.user_id = ? 
+        ORDER BY c.updated_at DESC
+    ");
     $items->execute([$uid]);
-    echo json_encode(['success' => true, 'items' => $items->fetchAll()]);
+    $cartItems = $items->fetchAll();
+
+    $total = 0;
+    foreach ($cartItems as $item) {
+        $total += $item['price'] * $item['quantity'];
+    }
+
+    echo json_encode([
+        'success' => true,
+        'items' => $cartItems,
+        'total' => $total
+    ]);
     exit;
 }
 
@@ -40,14 +56,31 @@ if ($action === 'add') {
         exit;
     }
 
-    // Nếu đã có thì tăng số lượng, chưa có thì thêm mới
+    $checkStock = $pdo->prepare("SELECT stock FROM products WHERE id = ?");
+    $checkStock->execute([$product_id]);
+    $stock = $checkStock->fetchColumn();
+
+    $currentQty = $pdo->prepare("SELECT quantity FROM cart WHERE user_id = ? AND product_id = ?");
+    $currentQty->execute([$uid, $product_id]);
+    $existingQty = $currentQty->fetchColumn() ?: 0;
+
+    $newTotalQty = $existingQty + $quantity;
+
+    if ($stock !== false && $newTotalQty > $stock) {
+        echo json_encode([
+            'success' => false,
+            'message' => "Sản phẩm chỉ còn $stock sản phẩm trong kho.",
+            'stock' => $stock
+        ]);
+        exit;
+    }
+
     $pdo->prepare("
         INSERT INTO cart (user_id, product_id, name, price, quantity, image, summary)
         VALUES (?, ?, ?, ?, ?, ?, ?)
         ON DUPLICATE KEY UPDATE quantity = quantity + VALUES(quantity)
     ")->execute([$uid, $product_id, $name, $price, $quantity, $image, $summary]);
 
-    // Đếm số loại sản phẩm trong giỏ
     $count = $pdo->prepare("SELECT COUNT(*) FROM cart WHERE user_id = ?");
     $count->execute([$uid]);
 
@@ -56,34 +89,60 @@ if ($action === 'add') {
 }
 
 // ── CẬP NHẬT SỐ LƯỢNG ──────────────────────────────────────
-if ($action === 'update') {                  <!-- update số lượng -->
+if ($action === 'update') {
     $product_id = trim($_POST['product_id'] ?? '');
     $quantity   = (int)($_POST['quantity']  ?? 0);
 
+    $checkStock = $pdo->prepare("SELECT stock FROM products WHERE id = ?");
+    $checkStock->execute([$product_id]);
+    $stock = $checkStock->fetchColumn();
+
+    if ($stock !== false && $quantity > $stock) {
+        echo json_encode([
+            'success' => false,
+            'message' => "Kho chỉ còn $stock sản phẩm.",
+            'stock' => $stock
+        ]);
+        exit;
+    }
+
     if ($quantity <= 0) {
-        // Số lượng = 0 thì xoá
         $pdo->prepare("DELETE FROM cart WHERE user_id = ? AND product_id = ?")->execute([$uid, $product_id]);
     } else {
         $pdo->prepare("UPDATE cart SET quantity = ? WHERE user_id = ? AND product_id = ?")->execute([$quantity, $uid, $product_id]);
     }
 
-    // Tính lại tổng
-    $total = $pdo->prepare("SELECT COALESCE(SUM(price * quantity), 0) FROM cart WHERE user_id = ?");   	<!-- Tính tổng tiền đơn hàng -->
+    $total = $pdo->prepare("SELECT COALESCE(SUM(price * quantity), 0) FROM cart WHERE user_id = ?");
     $total->execute([$uid]);
 
-    echo json_encode(['success' => true, 'total' => $total->fetchColumn()]);
+    $count = $pdo->prepare("SELECT COUNT(*) FROM cart WHERE user_id = ?");
+    $count->execute([$uid]);
+
+    echo json_encode([
+        'success' => true,
+        'total' => $total->fetchColumn(),
+        'cart_count' => $count->fetchColumn(),
+        'stock' => $stock
+    ]);
     exit;
 }
 
 // ── XOÁ 1 SẢN PHẨM ─────────────────────────────────────────
-if ($action === 'remove') {                       	<!-- xóa sản phẩm -->
+if ($action === 'remove') {
     $product_id = trim($_POST['product_id'] ?? '');
     $pdo->prepare("DELETE FROM cart WHERE user_id = ? AND product_id = ?")->execute([$uid, $product_id]);
 
     $total = $pdo->prepare("SELECT COALESCE(SUM(price * quantity), 0) FROM cart WHERE user_id = ?");
     $total->execute([$uid]);
 
-    echo json_encode(['success' => true, 'total' => $total->fetchColumn()]);
+    $count = $pdo->prepare("SELECT COUNT(*) FROM cart WHERE user_id = ?");
+    $count->execute([$uid]);
+
+    echo json_encode([
+        'success' => true,
+        'total' => $total->fetchColumn(),
+        'cart_count' => $count->fetchColumn()
+    ]);
     exit;
 }
 
