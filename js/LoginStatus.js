@@ -16,7 +16,7 @@ async function checkLoginStatus() {
         if (data.logged_in) {
             // Đã đăng nhập — hiện tên + link đơn hàng
             loginLi.innerHTML = `
-                <a href="#">
+                <a href="/may_tinh_sucvn/php/profile.php">
                     <i class="fa fa-user" aria-hidden="true"></i> ${data.full_name}
                 </a>`;
             if (signLi) signLi.style.display = 'none';

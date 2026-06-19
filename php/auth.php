@@ -81,13 +81,35 @@ function login(string $username_or_email, string $password): array {
 
 // ── LẤY USER HIỆN TẠI ──────────────────────────────────────
 function getCurrentUser(): ?array {
+    global $pdo;
+
     if (!empty($_SESSION['user_id'])) {
-        return [
+        $sessionUser = [
             'id'        => $_SESSION['user_id'],
-            'username'  => $_SESSION['username'],
-            'full_name' => $_SESSION['full_name'],
-            'role'      => $_SESSION['role'],
+            'username'  => $_SESSION['username'] ?? '',
+            'full_name' => $_SESSION['full_name'] ?? '',
+            'role'      => $_SESSION['role'] ?? 'customer',
         ];
+
+        try {
+            $stmt = $pdo->prepare("
+                SELECT id, username, email, full_name, phone, address, role, created_at
+                FROM users
+                WHERE id = ? AND is_active = 1
+                LIMIT 1
+            ");
+            $stmt->execute([$_SESSION['user_id']]);
+            $user = $stmt->fetch();
+
+            if ($user) {
+                $_SESSION['username']  = $user['username'];
+                $_SESSION['full_name'] = $user['full_name'];
+                $_SESSION['role']      = $user['role'];
+                return $user;
+            }
+        } catch (Throwable $e) {
+            return $sessionUser;
+        }
     }
     return null;
 }
