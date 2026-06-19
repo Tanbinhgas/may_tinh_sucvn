@@ -16,11 +16,34 @@ if ($action === 'status') {
             'logged_in' => true,
             'username'  => $user['username'],
             'full_name' => $user['full_name'],
+            'email'     => $user['email'] ?? '',
             'role'      => $user['role'],
+            'created_at'=> $user['created_at'] ?? null,
         ]);
     } else {
         echo json_encode(['logged_in' => false]);
     }
+    exit;
+}
+
+if ($action === 'profile') {
+    $user = getCurrentUser();
+    if (!$user) {
+        http_response_code(401);
+        echo json_encode(['logged_in' => false, 'message' => 'Vui lòng đăng nhập.']);
+        exit;
+    }
+
+    echo json_encode([
+        'logged_in'  => true,
+        'username'   => $user['username'],
+        'full_name'  => $user['full_name'],
+        'email'      => $user['email'] ?? '',
+        'phone'      => $user['phone'] ?? '',
+        'address'    => $user['address'] ?? '',
+        'role'       => $user['role'],
+        'created_at' => $user['created_at'] ?? null,
+    ]);
     exit;
 }
 
