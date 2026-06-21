@@ -1,0 +1,84 @@
+@page
+@using may_tinh_sucvn.Models
+@model may_tinh_sucvn.Pages.Admin.UsersModel
+@{ ViewData["Title"] = "Quản lý người dùng"; }
+
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div class="alert ok">@Model.Message</div>
+}
+
+<div class="panel">
+    <table>
+        <thead>
+            <tr><th>ID</th><th>Tài khoản</th><th>Email</th><th>Vai trò</th><th class="right">Đơn</th><th>Trạng thái</th><th>Tạo lúc</th><th></th></tr>
+        </thead>
+        <tbody>
+            @if (Model.Users.Count == 0)
+            {
+                <tr class="empty-row"><td colspan="8">Chưa có người dùng nào.</td></tr>
+            }
+            else
+            {
+                @foreach (var r in Model.Users)
+                {
+                    var u = r.User;
+                    var isMe = u.Id == Model.CurrentUserId;
+                    <tr>
+                        <td>@u.Id</td>
+                        <td>
+                            @(u.FullName ?? u.Username)
+                            @if (isMe) { <span class="badge blue" style="margin-left:6px">bạn</span> }
+                            <br /><span class="muted" style="font-size:.78rem">@@@u.Username</span>
+                        </td>
+                        <td>@u.Email</td>
+                        <td>
+                            @if (u.Role == UserRole.Admin)
+                            {
+                                <span class="badge purple">Quản trị</span>
+                            }
+                            else
+                            {
+                                <span class="badge gray">Khách hàng</span>
+                            }
+                        </td>
+                        <td class="right">@r.OrderCount</td>
+                        <td>
+                            @if (u.IsActive)
+                            {
+                                <span class="badge green">Hoạt động</span>
+                            }
+                            else
+                            {
+                                <span class="badge red">Đã khoá</span>
+                            }
+                        </td>
+                        <td>@u.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy")</td>
+                        <td>
+                            @if (!isMe)
+                            {
+                                <div class="actions">
+                                    <form method="post" asp-page-handler="ToggleRole" asp-route-id="@u.Id">
+                                        <button class="btn btn-soft btn-sm" type="submit">
+                                            @(u.Role == UserRole.Admin ? "Hạ quyền" : "Cấp admin")
+                                        </button>
+                                    </form>
+                                    <form method="post" asp-page-handler="ToggleActive" asp-route-id="@u.Id"
+                                          onsubmit="return confirm('@(u.IsActive ? "Khoá" : "Mở khoá") tài khoản này?');">
+                                        <button class="btn @(u.IsActive ? "btn-danger" : "btn-soft") btn-sm" type="submit">
+                                            @(u.IsActive ? "Khoá" : "Mở khoá")
+                                        </button>
+                                    </form>
+                                </div>
+                            }
+                            else
+                            {
+                                <span class="muted">—</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

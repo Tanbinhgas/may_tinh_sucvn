@@ -1,0 +1,47 @@
+@page
+@model may_tinh_sucvn.Pages.LoginModel
+@{ Layout = null; }
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/images/logo-1.png" />
+    <title>Đăng Nhập - TKL Computer</title>
+    <link href="/css/styleLogReg.css" rel="stylesheet" type="text/css" />
+    <style>
+        .auth-logo { display:block; margin:0 auto 12px; max-width:90px; }
+        .auth-message { margin-bottom:16px; padding:8px 12px; border-radius:5px; text-align:center; font-size:1.05rem; }
+        .auth-message.error { color:#c0392b; background:#fdecea; }
+        .login__container form label { color:#333; }
+        .login__backHome { text-align:center; display:block; margin-top:14px; font-size:1rem; color:#888; text-decoration:none; }
+        .login__backHome:hover { color:#555; }
+    </style>
+</head>
+<body>
+    <div class="login">
+        <div class="login__container">
+            <a href="/"><img src="/images/logo-1.png" alt="TKL Computer" class="auth-logo" /></a>
+            <h1>Đăng Nhập</h1>
+
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="auth-message error">@Model.ErrorMessage</div>
+            }
+
+            <form method="post">
+                <label asp-for="UsernameOrEmail">Email / Tên đăng nhập</label>
+                <input asp-for="UsernameOrEmail" autocomplete="username" placeholder="Nhập email hoặc tên đăng nhập" />
+
+                <label asp-for="Password">Mật khẩu</label>
+                <input asp-for="Password" type="password" autocomplete="current-password" placeholder="Nhập mật khẩu" />
+
+                <button type="submit">Đăng Nhập</button>
+            </form>
+
+            <a asp-page="/Signup" class="login__registerButton">Tạo tài khoản mới</a>
+            <a href="/" class="login__backHome">← Về trang chủ</a>
+        </div>
+    </div>
+</body>
+</html>

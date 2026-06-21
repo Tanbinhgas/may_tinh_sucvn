@@ -1,0 +1,76 @@
+@page
+@using may_tinh_sucvn.Models
+@using may_tinh_sucvn.Pages.Admin
+@model may_tinh_sucvn.Pages.MyOrdersModel
+@{ Layout = null; }
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/images/logo-1.png" />
+    <title>Đơn hàng của tôi - TKL Computer</title>
+    <link href="//fonts.googleapis.com/css?family=Montserrat:400,600,700" rel="stylesheet" />
+    <link href="/css/store.css" rel="stylesheet" />
+</head>
+<body>
+    <header class="store-header">
+        <a class="brand" href="/"><img src="/images/logo-1.png" alt="TKL Computer" /> TKL Computer</a>
+        <nav class="store-nav">
+            <a href="/">Trang chủ</a>
+            <a href="/Cart">Giỏ hàng</a>
+            <a href="/Profile">Tài khoản</a>
+            <form method="post" asp-page="/Logout"><button type="submit">Đăng xuất</button></form>
+        </nav>
+    </header>
+
+    <div class="wrap">
+        <h1 class="page-title">Đơn hàng của tôi</h1>
+
+        @if (!string.IsNullOrEmpty(Model.Message))
+        {
+            <div class="alert ok">@Model.Message</div>
+        }
+
+        @if (Model.Orders.Count == 0)
+        {
+            <div class="panel"><div class="empty">Bạn chưa có đơn hàng nào.<br /><a href="/" class="btn btn-primary" style="margin-top:14px">Mua sắm ngay</a></div></div>
+        }
+        else
+        {
+            @foreach (var o in Model.Orders)
+            {
+                <div class="order-card">
+                    <div class="head">
+                        <div>
+                            <strong>Đơn #@o.Id</strong>
+                            <span class="badge @AdminFormat.StatusBadge(o.Status)" style="margin-left:8px">@AdminFormat.StatusText(o.Status)</span>
+                            <div class="meta">Đặt lúc @o.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm") · Giao tới: @o.ShippingAddress</div>
+                        </div>
+                        <div class="right"><strong style="color:#c0392b">@o.TotalPrice.ToString("#,##0")₫</strong></div>
+                    </div>
+                    <div class="items">
+                        @foreach (var it in o.Items)
+                        {
+                            <div class="line">
+                                <span>@it.ProductName <span class="muted">× @it.Quantity</span></span>
+                                <span>@((it.Price * it.Quantity).ToString("#,##0"))₫</span>
+                            </div>
+                        }
+                    </div>
+                    @if (o.Status == OrderStatus.Pending)
+                    {
+                        <div class="foot">
+                            <span class="muted">Bạn có thể huỷ khi đơn còn đang chờ xác nhận.</span>
+                            <form method="post" asp-page-handler="Cancel" asp-route-id="@o.Id"
+                                  onsubmit="return confirm('Huỷ đơn hàng #@o.Id?');">
+                                <button type="submit" class="btn btn-danger btn-sm">Huỷ đơn</button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            }
+        }
+    </div>
+</body>
+</html>

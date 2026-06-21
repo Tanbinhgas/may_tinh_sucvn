@@ -1,0 +1,94 @@
+@page
+@using may_tinh_sucvn.Models
+@model may_tinh_sucvn.Pages.ProfileModel
+@{
+    Layout = null;
+    var a = Model.Account!;
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/images/logo-1.png" />
+    <title>Tài khoản của tôi - TKL Computer</title>
+    <link href="//fonts.googleapis.com/css?family=Montserrat:400,600,700" rel="stylesheet" />
+    <link href="/css/store.css" rel="stylesheet" />
+    <style>
+        .ro { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:18px; }
+        .ro .box { background:#f8fafc; border-radius:8px; padding:12px 16px; min-width:200px; }
+        .ro .box .k { font-size:.74rem; text-transform:uppercase; letter-spacing:.4px; color:#94a3b8; }
+        .ro .box .v { font-weight:600; margin-top:3px; }
+    </style>
+</head>
+<body>
+    <header class="store-header">
+        <a class="brand" href="/"><img src="/images/logo-1.png" alt="TKL Computer" /> TKL Computer</a>
+        <nav class="store-nav">
+            <a href="/">Trang chủ</a>
+            <a href="/Cart">Giỏ hàng</a>
+            <a href="/MyOrders">Đơn của tôi</a>
+            @if (User.IsInRole("Admin")) { <a href="/Admin/Index">Quản trị</a> }
+            <form method="post" asp-page="/Logout"><button type="submit">Đăng xuất</button></form>
+        </nav>
+    </header>
+
+    <div class="wrap">
+        <h1 class="page-title">Tài khoản của tôi</h1>
+
+        <div class="panel">
+            <h2>Thông tin tài khoản</h2>
+            <div class="panel-body" style="max-width:620px">
+                <div class="ro">
+                    <div class="box"><div class="k">Tên đăng nhập</div><div class="v">@a.Username</div></div>
+                    <div class="box"><div class="k">Email</div><div class="v">@a.Email</div></div>
+                    <div class="box"><div class="k">Vai trò</div><div class="v">@(a.Role == UserRole.Admin ? "Quản trị" : "Khách hàng")</div></div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.InfoError)) { <div class="alert error">@Model.InfoError</div> }
+                @if (!string.IsNullOrEmpty(Model.InfoOk)) { <div class="alert ok">@Model.InfoOk</div> }
+
+                <form method="post" asp-page-handler="Info">
+                    <div class="field">
+                        <label asp-for="FullName">Họ và tên</label>
+                        <input asp-for="FullName" placeholder="Nguyễn Văn A" />
+                    </div>
+                    <div class="field">
+                        <label asp-for="Phone">Số điện thoại</label>
+                        <input asp-for="Phone" placeholder="0901234567" />
+                    </div>
+                    <div class="field">
+                        <label asp-for="Address">Địa chỉ mặc định</label>
+                        <textarea asp-for="Address" rows="3" placeholder="Dùng để điền sẵn khi thanh toán"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Lưu thông tin</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>Đổi mật khẩu</h2>
+            <div class="panel-body" style="max-width:620px">
+                @if (!string.IsNullOrEmpty(Model.PwError)) { <div class="alert error">@Model.PwError</div> }
+                @if (!string.IsNullOrEmpty(Model.PwOk)) { <div class="alert ok">@Model.PwOk</div> }
+
+                <form method="post" asp-page-handler="Password">
+                    <div class="field">
+                        <label asp-for="CurrentPassword">Mật khẩu hiện tại</label>
+                        <input asp-for="CurrentPassword" type="password" autocomplete="current-password" />
+                    </div>
+                    <div class="field">
+                        <label asp-for="NewPassword">Mật khẩu mới (tối thiểu 6 ký tự)</label>
+                        <input asp-for="NewPassword" type="password" autocomplete="new-password" />
+                    </div>
+                    <div class="field">
+                        <label asp-for="ConfirmPassword">Xác nhận mật khẩu mới</label>
+                        <input asp-for="ConfirmPassword" type="password" autocomplete="new-password" />
+                    </div>
+                    <button type="submit" class="btn btn-dark">Đổi mật khẩu</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

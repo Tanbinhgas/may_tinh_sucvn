@@ -1,0 +1,53 @@
+@page
+@model may_tinh_sucvn.Pages.SignupModel
+@{ Layout = null; }
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/images/logo-1.png" />
+    <title>Đăng Ký - TKL Computer</title>
+    <link href="/css/styleLogReg.css" rel="stylesheet" type="text/css" />
+    <style>
+        .auth-logo { display:block; margin:0 auto 12px; max-width:90px; }
+        .auth-message { margin-bottom:16px; padding:8px 12px; border-radius:5px; text-align:center; font-size:1.05rem; }
+        .auth-message.error { color:#c0392b; background:#fdecea; }
+        .signup__container form label { color:#333; }
+        .signup__backHome { text-align:center; display:block; margin-top:14px; font-size:1rem; color:#888; text-decoration:none; }
+        .signup__backHome:hover { color:#555; }
+    </style>
+</head>
+<body>
+    <div class="signup">
+        <div class="signup__container">
+            <a href="/"><img src="/images/logo-1.png" alt="TKL Computer" class="auth-logo" /></a>
+            <h1>Đăng Ký</h1>
+
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="auth-message error">@Model.ErrorMessage</div>
+            }
+
+            <form method="post">
+                <label asp-for="FullName">Họ và tên</label>
+                <input asp-for="FullName" placeholder="Nguyễn Văn A" />
+
+                <label asp-for="Email">Email</label>
+                <input asp-for="Email" type="email" autocomplete="email" placeholder="ban@example.com" />
+
+                <label asp-for="Phone">Số điện thoại</label>
+                <input asp-for="Phone" placeholder="0901234567" />
+
+                <label asp-for="Password">Mật khẩu</label>
+                <input asp-for="Password" type="password" autocomplete="new-password" placeholder="Tối thiểu 6 ký tự" />
+
+                <button type="submit">Đăng Ký</button>
+            </form>
+
+            <a asp-page="/Login" class="signup__registerButton">Đã có tài khoản? Đăng nhập</a>
+            <a href="/" class="signup__backHome">← Về trang chủ</a>
+        </div>
+    </div>
+</body>
+</html>

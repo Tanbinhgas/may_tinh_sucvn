@@ -1,0 +1,68 @@
+@page
+@using may_tinh_sucvn.Models
+@model may_tinh_sucvn.Pages.Admin.ProductsModel
+@{ ViewData["Title"] = "Quản lý sản phẩm"; }
+
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div class="alert ok">@Model.Message</div>
+}
+
+<div class="toolbar">
+    <div class="muted">Tổng cộng @Model.Products.Count sản phẩm</div>
+    <a class="btn btn-primary" href="/Admin/ProductEdit">+ Thêm sản phẩm</a>
+</div>
+
+<div class="panel">
+    <table>
+        <thead>
+            <tr>
+                <th>Ảnh</th><th>Tên</th><th>Danh mục</th><th>Hãng</th>
+                <th class="right">Giá</th><th class="right">Tồn</th><th>Trạng thái</th><th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Products.Count == 0)
+            {
+                <tr class="empty-row"><td colspan="8">Chưa có sản phẩm nào.</td></tr>
+            }
+            else
+            {
+                @foreach (var p in Model.Products)
+                {
+                    <tr>
+                        <td><img class="thumb-sm" src="@(p.ImageUrl ?? "/images/logo-1.png")" alt=""
+                                 onerror="this.onerror=null;this.src='/images/logo-1.png';" /></td>
+                        <td>@p.Name<br /><span class="muted" style="font-size:.78rem">@p.Slug</span></td>
+                        <td>@(p.Category?.Name ?? "—")</td>
+                        <td>@(p.Brand ?? "—")</td>
+                        <td class="right">@AdminFormat.Vnd(p.Price)</td>
+                        <td class="right">@p.Stock</td>
+                        <td>
+                            @if (p.IsActive)
+                            {
+                                <span class="badge green">Đang bán</span>
+                            }
+                            else
+                            {
+                                <span class="badge gray">Đã ẩn</span>
+                            }
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <a class="btn btn-soft btn-sm" href="/Admin/ProductEdit/@p.Id">Sửa</a>
+                                <form method="post" asp-page-handler="Toggle" asp-route-id="@p.Id">
+                                    <button class="btn btn-soft btn-sm" type="submit">@(p.IsActive ? "Ẩn" : "Hiện")</button>
+                                </form>
+                                <form method="post" asp-page-handler="Delete" asp-route-id="@p.Id"
+                                      onsubmit="return confirm('Xoá sản phẩm này?');">
+                                    <button class="btn btn-danger btn-sm" type="submit">Xoá</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

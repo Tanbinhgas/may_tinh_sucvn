@@ -1,0 +1,79 @@
+/* ===== TKL Computer · giao diện chung cho trang khách hàng (giỏ hàng, thanh toán, đơn hàng) ===== */
+* { box-sizing: border-box; }
+body { font-family:'Montserrat',system-ui,'Segoe UI',sans-serif; background:#f5f5f5; margin:0; color:#222; }
+a { text-decoration:none; }
+
+.store-header { display:flex; align-items:center; justify-content:space-between; padding:12px 28px; background:#1a1a1a; color:#fff; flex-wrap:wrap; gap:10px; }
+.store-header a { color:#fff; }
+.store-header .brand { display:flex; align-items:center; gap:10px; font-weight:700; font-size:1.25rem; }
+.store-header .brand img { height:38px; }
+.store-nav { display:flex; align-items:center; gap:18px; font-size:.95rem; }
+.store-nav form { display:inline; margin:0; }
+.store-nav button { background:none; border:none; color:#fff; cursor:pointer; font:inherit; }
+.store-nav button:hover { color:#e0a0a0; }
+
+.wrap { max-width:1000px; margin:0 auto; padding:28px 20px 60px; }
+.page-title { font-size:1.6rem; margin:6px 0 22px; }
+
+.panel { background:#fff; border-radius:12px; box-shadow:0 1px 6px rgba(0,0,0,.07); margin-bottom:22px; overflow:hidden; }
+.panel > h2 { font-size:1.05rem; padding:16px 20px; border-bottom:1px solid #eef1f4; margin:0; }
+.panel-body { padding:20px; }
+
+table { width:100%; border-collapse:collapse; font-size:.92rem; }
+thead th { text-align:left; padding:12px 16px; background:#f8fafc; color:#64748b; font-weight:600; font-size:.78rem; text-transform:uppercase; letter-spacing:.3px; border-bottom:1px solid #eef1f4; }
+tbody td, tfoot td { padding:12px 16px; border-bottom:1px solid #f1f4f7; vertical-align:middle; }
+.right { text-align:right; }
+.muted { color:#94a3b8; }
+
+.thumb { width:46px; height:46px; object-fit:contain; background:#f8fafc; border-radius:6px; vertical-align:middle; margin-right:10px; }
+
+.btn { display:inline-block; padding:10px 18px; border-radius:8px; border:none; cursor:pointer; font-size:.92rem; font-weight:600; }
+.btn-primary { background:#c0392b; color:#fff; }
+.btn-primary:hover { background:#a93226; }
+.btn-dark { background:#1a1a1a; color:#fff; }
+.btn-dark:hover { background:#000; }
+.btn-soft { background:#eef2f7; color:#334155; }
+.btn-soft:hover { background:#e2e8f0; }
+.btn-danger { background:#fee2e2; color:#991b1b; }
+.btn-danger:hover { background:#fecaca; }
+.btn-sm { padding:6px 12px; font-size:.82rem; }
+.btn[disabled] { background:#bbb; cursor:not-allowed; }
+
+input, textarea, select { font-family:inherit; font-size:.95rem; padding:11px 13px; border:1px solid #cbd5e1; border-radius:8px; width:100%; }
+input:focus, textarea:focus { outline:none; border-color:#c0392b; }
+label { display:block; font-size:.85rem; font-weight:600; color:#475569; margin:0 0 6px; }
+.field { margin-bottom:18px; }
+
+.alert { padding:12px 16px; border-radius:8px; margin-bottom:18px; font-size:.92rem; }
+.alert.error { background:#fee2e2; color:#991b1b; }
+.alert.ok { background:#dcfce7; color:#166534; }
+.alert ul { margin:6px 0 0; padding-left:18px; }
+
+.summary-total { display:flex; justify-content:space-between; align-items:center; font-size:1.2rem; font-weight:700; padding:14px 20px; border-top:2px solid #f1f4f7; }
+.summary-total .amount { color:#c0392b; }
+
+.qty-input { width:70px; display:inline-block; padding:7px 8px; }
+
+/* Badges trạng thái đơn (dùng chung mã màu với khu admin) */
+.badge { display:inline-block; padding:4px 11px; border-radius:20px; font-size:.76rem; font-weight:600; }
+.badge.gray { background:#e5e7eb; color:#374151; }
+.badge.amber { background:#fef3c7; color:#92400e; }
+.badge.blue { background:#dbeafe; color:#1e40af; }
+.badge.purple { background:#ede9fe; color:#5b21b6; }
+.badge.green { background:#dcfce7; color:#166534; }
+.badge.red { background:#fee2e2; color:#991b1b; }
+
+/* Thẻ đơn hàng trong "Đơn hàng của tôi" */
+.order-card { border:1px solid #eef1f4; border-radius:10px; margin-bottom:16px; overflow:hidden; }
+.order-card .head { display:flex; justify-content:space-between; align-items:center; padding:14px 18px; background:#fafbfc; flex-wrap:wrap; gap:10px; }
+.order-card .head .meta { font-size:.85rem; color:#64748b; }
+.order-card .items { padding:6px 18px 14px; }
+.order-card .items .line { display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px dashed #eef1f4; font-size:.9rem; }
+.order-card .items .line:last-child { border-bottom:none; }
+.order-card .foot { display:flex; justify-content:space-between; align-items:center; padding:12px 18px; border-top:1px solid #f1f4f7; }
+
+.success-hero { text-align:center; padding:40px 20px 10px; }
+.success-hero .check { width:72px; height:72px; border-radius:50%; background:#dcfce7; color:#16a34a; font-size:2.4rem; line-height:72px; margin:0 auto 16px; }
+.success-hero h1 { font-size:1.7rem; margin:0 0 6px; }
+
+.empty { text-align:center; color:#94a3b8; padding:50px 0; }

@@ -1,0 +1,81 @@
+@page
+@using may_tinh_sucvn.Models
+@model may_tinh_sucvn.Pages.Admin.RevenueModel
+@{
+    ViewData["Title"] = "Doanh thu";
+    var maxMonth = Model.ByMonth.Count > 0 ? Model.ByMonth.Max(m => m.Sum) : 0m;
+}
+
+<div class="cards">
+    <div class="stat"><div class="label">Doanh thu (đơn hoàn thành)</div><div class="value green">@AdminFormat.Vnd(Model.TotalRevenue)</div></div>
+    <div class="stat"><div class="label">Số đơn hoàn thành</div><div class="value">@Model.DoneOrders</div></div>
+    <div class="stat"><div class="label">Giá trị đơn đang xử lý</div><div class="value amber">@AdminFormat.Vnd(Model.OpenValue)</div></div>
+</div>
+
+<div class="panel">
+    <h2>Theo trạng thái</h2>
+    <table>
+        <thead><tr><th>Trạng thái</th><th class="right">Số đơn</th><th class="right">Tổng giá trị</th></tr></thead>
+        <tbody>
+            @if (Model.ByStatus.Count == 0)
+            {
+                <tr class="empty-row"><td colspan="3">Chưa có dữ liệu.</td></tr>
+            }
+            else
+            {
+                @foreach (var s in Model.ByStatus.OrderBy(x => x.Status))
+                {
+                    <tr>
+                        <td><span class="badge @AdminFormat.StatusBadge(s.Status)">@AdminFormat.StatusText(s.Status)</span></td>
+                        <td class="right">@s.Count</td>
+                        <td class="right">@AdminFormat.Vnd(s.Sum)</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="panel">
+    <h2>Doanh thu 6 tháng gần nhất (đơn hoàn thành)</h2>
+    <div class="panel-body">
+        @if (Model.ByMonth.Count == 0)
+        {
+            <div class="muted">Chưa có doanh thu trong 6 tháng gần đây.</div>
+        }
+        else
+        {
+            @foreach (var m in Model.ByMonth)
+            {
+                var pct = maxMonth > 0 ? (double)(m.Sum / maxMonth) * 100 : 0;
+                <div style="margin-bottom:14px">
+                    <div style="display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:5px">
+                        <span>Tháng @m.Month/@m.Year (@m.Count đơn)</span>
+                        <strong>@AdminFormat.Vnd(m.Sum)</strong>
+                    </div>
+                    <div class="bar-track"><div class="bar-fill" style="width:@pct.ToString("0.#")%"></div></div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<div class="panel">
+    <h2>Sản phẩm bán chạy</h2>
+    <table>
+        <thead><tr><th>Sản phẩm</th><th class="right">Đã bán</th><th class="right">Doanh thu</th></tr></thead>
+        <tbody>
+            @if (Model.Top.Count == 0)
+            {
+                <tr class="empty-row"><td colspan="3">Chưa có dữ liệu bán hàng.</td></tr>
+            }
+            else
+            {
+                @foreach (var t in Model.Top)
+                {
+                    <tr><td>@t.Name</td><td class="right">@t.Quantity</td><td class="right">@AdminFormat.Vnd(t.Revenue)</td></tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

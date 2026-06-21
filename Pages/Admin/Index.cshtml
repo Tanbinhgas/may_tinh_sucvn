@@ -1,0 +1,41 @@
+@page
+@using may_tinh_sucvn.Models
+@model may_tinh_sucvn.Pages.Admin.IndexModel
+@{ ViewData["Title"] = "Bảng điều khiển"; }
+
+<div class="cards">
+    <div class="stat"><div class="label">Sản phẩm đang bán</div><div class="value">@Model.ProductCount</div></div>
+    <div class="stat"><div class="label">Tổng đơn hàng</div><div class="value">@Model.OrderCount</div></div>
+    <div class="stat"><div class="label">Đơn chờ xử lý</div><div class="value amber">@Model.PendingCount</div></div>
+    <div class="stat"><div class="label">Khách hàng</div><div class="value">@Model.UserCount</div></div>
+    <div class="stat"><div class="label">Doanh thu (đã hoàn thành)</div><div class="value green">@AdminFormat.Vnd(Model.Revenue)</div></div>
+</div>
+
+<div class="panel">
+    <h2>Đơn hàng gần đây</h2>
+    <table>
+        <thead>
+            <tr><th>Mã</th><th>Khách hàng</th><th>Ngày</th><th class="right">Tổng tiền</th><th>Trạng thái</th><th></th></tr>
+        </thead>
+        <tbody>
+            @if (Model.RecentOrders.Count == 0)
+            {
+                <tr class="empty-row"><td colspan="6">Chưa có đơn hàng nào.</td></tr>
+            }
+            else
+            {
+                @foreach (var o in Model.RecentOrders)
+                {
+                    <tr>
+                        <td>#@o.Id</td>
+                        <td>@(o.User?.FullName ?? o.User?.Username ?? "—")</td>
+                        <td>@o.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
+                        <td class="right">@AdminFormat.Vnd(o.TotalPrice)</td>
+                        <td><span class="badge @AdminFormat.StatusBadge(o.Status)">@AdminFormat.StatusText(o.Status)</span></td>
+                        <td class="right"><a class="btn btn-soft btn-sm" href="/Admin/OrderDetail/@o.Id">Chi tiết</a></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

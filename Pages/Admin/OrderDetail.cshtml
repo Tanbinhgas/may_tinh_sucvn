@@ -1,0 +1,91 @@
+@page "/Admin/OrderDetail/{id:int}"
+@using may_tinh_sucvn.Models
+@model may_tinh_sucvn.Pages.Admin.OrderDetailModel
+@{
+    ViewData["Title"] = $"Đơn hàng #{Model.Order?.Id}";
+    var o = Model.Order!;
+}
+
+<div class="toolbar">
+    <a class="btn btn-soft" href="/Admin/Orders">← Quay lại danh sách</a>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div class="alert ok">@Model.Message</div>
+}
+
+<div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+    <div class="stat">
+        <div class="label">Khách hàng</div>
+        <div style="margin-top:8px;font-weight:600">@(o.User?.FullName ?? o.User?.Username ?? "—")</div>
+        <div class="muted" style="font-size:.85rem">@o.User?.Email</div>
+    </div>
+    <div class="stat">
+        <div class="label">Giao tới</div>
+        <div style="margin-top:8px">@o.ShippingAddress</div>
+        <div class="muted" style="font-size:.85rem">SĐT: @o.Phone</div>
+    </div>
+    <div class="stat">
+        <div class="label">Trạng thái</div>
+        <div style="margin-top:8px"><span class="badge @AdminFormat.StatusBadge(o.Status)">@AdminFormat.StatusText(o.Status)</span></div>
+        <div class="muted" style="font-size:.85rem">Đặt lúc @o.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</div>
+    </div>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(o.Note))
+{
+    <div class="panel"><div class="panel-body"><strong>Ghi chú:</strong> @o.Note</div></div>
+}
+
+<div class="panel">
+    <h2>Sản phẩm trong đơn</h2>
+    <table>
+        <thead>
+            <tr><th>Sản phẩm</th><th class="right">Đơn giá</th><th class="right">SL</th><th class="right">Thành tiền</th></tr>
+        </thead>
+        <tbody>
+            @foreach (var it in o.Items)
+            {
+                <tr>
+                    <td>@it.ProductName</td>
+                    <td class="right">@AdminFormat.Vnd(it.Price)</td>
+                    <td class="right">@it.Quantity</td>
+                    <td class="right">@AdminFormat.Vnd(it.Price * it.Quantity)</td>
+                </tr>
+            }
+            <tr>
+                <td colspan="3" class="right"><strong>Tổng cộng</strong></td>
+                <td class="right"><strong style="color:#e74c3c">@AdminFormat.Vnd(o.TotalPrice)</strong></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="panel">
+    <h2>Cập nhật trạng thái</h2>
+    <div class="panel-body">
+        <form method="post" asp-page-handler="Status" asp-route-id="@o.Id" style="display:flex;gap:12px;align-items:center;max-width:420px">
+            <select name="status">
+                @foreach (var s in Enum.GetValues<OrderStatus>())
+                {
+                    @if (s != OrderStatus.Cancelled)
+                    {
+                        <option value="@s" selected="@(s == o.Status)">@AdminFormat.StatusText(s)</option>
+                    }
+                }
+            </select>
+            <button class="btn btn-primary" type="submit">Lưu</button>
+        </form>
+
+        @if (o.Status != OrderStatus.Done && o.Status != OrderStatus.Cancelled)
+        {
+            <hr style="margin:18px 0;border:none;border-top:1px solid #eef1f4" />
+            <form method="post" asp-page-handler="Cancel" asp-route-id="@o.Id"
+                  onsubmit="return confirm('Huỷ đơn #@o.Id và hoàn lại tồn kho?');">
+                <button class="btn btn-danger" type="submit">Huỷ đơn (hoàn kho)</button>
+                <span class="muted" style="margin-left:8px;font-size:.85rem">Trả lại số lượng đã trừ vào kho.</span>
+            </form>
+        }
+    </div>
+</div>

@@ -1,0 +1,86 @@
+@page
+@model may_tinh_sucvn.Pages.CheckoutModel
+@{ Layout = null; }
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/images/logo-1.png" />
+    <title>Thanh toán - TKL Computer</title>
+    <link href="//fonts.googleapis.com/css?family=Montserrat:400,600,700" rel="stylesheet" />
+    <link href="/css/store.css" rel="stylesheet" />
+</head>
+<body>
+    <header class="store-header">
+        <a class="brand" href="/"><img src="/images/logo-1.png" alt="TKL Computer" /> TKL Computer</a>
+        <nav class="store-nav">
+            <a href="/">Trang chủ</a>
+            <a href="/Cart">Giỏ hàng</a>
+            <a href="/MyOrders">Đơn của tôi</a>
+                <a href="/Profile">Tài khoản</a>
+            <form method="post" asp-page="/Logout"><button type="submit">Đăng xuất</button></form>
+        </nav>
+    </header>
+
+    <div class="wrap">
+        <h1 class="page-title">Thanh toán</h1>
+
+        @if (!string.IsNullOrEmpty(Model.Error))
+        {
+            <div class="alert error">@Model.Error</div>
+        }
+        @if (Model.StockErrors.Count > 0)
+        {
+            <div class="alert error">
+                Không thể đặt hàng do tồn kho thay đổi:
+                <ul>
+                    @foreach (var e in Model.StockErrors) { <li>@e</li> }
+                </ul>
+                Vui lòng <a href="/Cart">quay lại giỏ hàng</a> để điều chỉnh.
+            </div>
+        }
+
+        <div class="panel">
+            <h2>Đơn hàng của bạn</h2>
+            <table>
+                <thead><tr><th>Sản phẩm</th><th class="right">Đơn giá</th><th class="right">SL</th><th class="right">Thành tiền</th></tr></thead>
+                <tbody>
+                    @foreach (var l in Model.Cart.Lines)
+                    {
+                        <tr>
+                            <td>@l.Name</td>
+                            <td class="right">@l.Price.ToString("#,##0")₫</td>
+                            <td class="right">@l.Quantity</td>
+                            <td class="right">@l.LineTotal.ToString("#,##0")₫</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="summary-total"><span>Tổng cộng</span><span class="amount">@Model.Cart.Total.ToString("#,##0")₫</span></div>
+        </div>
+
+        <div class="panel">
+            <h2>Thông tin giao hàng</h2>
+            <div class="panel-body" style="max-width:620px">
+                <form method="post">
+                    <div class="field">
+                        <label asp-for="Phone">Số điện thoại</label>
+                        <input asp-for="Phone" placeholder="0901234567" />
+                    </div>
+                    <div class="field">
+                        <label asp-for="Address">Địa chỉ nhận hàng</label>
+                        <textarea asp-for="Address" rows="3" placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành"></textarea>
+                    </div>
+                    <div class="field">
+                        <label asp-for="Note">Ghi chú (tuỳ chọn)</label>
+                        <textarea asp-for="Note" rows="2" placeholder="Ghi chú cho người giao hàng..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Đặt hàng (@Model.Cart.Total.ToString("#,##0")₫)</button>
+                    <a href="/Cart" class="btn btn-soft">← Quay lại giỏ</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

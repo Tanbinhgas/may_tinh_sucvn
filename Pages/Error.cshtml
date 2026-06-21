@@ -1,0 +1,20 @@
+@page
+@model may_tinh_sucvn.Pages.ErrorModel
+@{ Layout = null; }
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lỗi - TKL Computer</title>
+</head>
+<body>
+    <h1>Đã xảy ra lỗi</h1>
+    <p>Xin lỗi, có sự cố xảy ra khi xử lý yêu cầu. Vui lòng thử lại sau.</p>
+    @if (Model.ShowRequestId)
+    {
+        <p>Mã yêu cầu: <code>@Model.RequestId</code></p>
+    }
+    <a asp-page="/Index">← Về trang chủ</a>
+</body>
+</html>

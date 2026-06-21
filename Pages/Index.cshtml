@@ -1,0 +1,1468 @@
+@page
+@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link class="icon" href="/images/logo-1.png" />
+    <title>TKL Computer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="keywords"
+      content="TKL Store, Computer Store, TKL Computer Store, Computer Shop, TKL Computer Shop, TKL Shop"
+    />
+    <link href="/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="/css/style.css" rel="stylesheet" type="text/css" />
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <link href="/css/font-awesome.css" rel="stylesheet" />
+    <link
+      href="//fonts.googleapis.com/css?family=Montserrat:400,700"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="//fonts.googleapis.com/css?family=Noto+Sans:400,700"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+  <body>
+    <!-- Header -->
+    <div class="header">
+      <div class="container">
+        <div class="logo">
+          <h1>
+            <a href="/"
+              ><b>P<br />C</b>TKL Computer<span
+                >Prestige is more precious than gold</span
+              ></a
+            >
+          </h1>
+        </div>
+        <div class="head-t">
+          <ul class="card">
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+            	<li><a href="/Profile"><i class="fa fa-user" aria-hidden="true"></i>@(User.FindFirst("FullName")?.Value ?? User.Identity!.Name)</a></li>
+            	<li><a href="/Logout"><i class="fa fa-sign-out" aria-hidden="true"></i>Đăng Xuất</a></li>
+            }
+            else
+            {
+            	<li><a href="/login"><i class="fa fa-user" aria-hidden="true"></i>Đăng Nhập</a></li>
+            	<li><a href="/signup"><i class="fa fa-arrow-right" aria-hidden="true"></i>Đăng Ký</a></li>
+            }
+          </ul>
+        </div>
+        <div class="header-ri">
+          <ul class="social-top">
+            <li>
+              <a href="#" class="icon facebook"
+                ><i class="fa fa-facebook" aria-hidden="true"></i><span></span
+              ></a>
+            </li>
+          </ul>
+        </div>
+        <div class="nav-top">
+          <nav class="navbar navbar-default">
+            <div class="navbar-header nav_2">
+              <button
+                type="button"
+                class="navbar-toggle collapsed navbar-toggle1"
+                data-toggle="collapse"
+                data-target="#bs-megadropdown-tabs"
+              >
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
+              <ul class="nav navbar-nav">
+                <li class="active">
+                  <a href="/" class="hyper"><span>Trang Chủ</span></a>
+                </li>
+                <li class="dropdown">
+                  <a
+                    href="#"
+                    class="dropdown-toggle hyper"
+                    data-toggle="dropdown"
+                    ><i class="fa-solid fa-boxes-stacked"></i
+                    ><span> Linh Kiện PC<b class="caret"></b></span
+                  ></a>
+                  <ul class="dropdown-menu multi">
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <ul class="multi-column-dropdown">
+                          <li>
+                            <a href="/category/mainboard"
+                              ><i class="fa-solid fa-microchip"></i>Mainboard</a
+                            >
+                          </li>
+                          <li>
+                            <a href="/category/cpu"
+                              ><i class="fa-solid fa-microchip"></i>CPU</a
+                            >
+                          </li>
+                          <li>
+                            <a href="/category/ram">
+                              <i class="fa-solid fa-memory"></i>RAM</a
+                            >
+                          </li>
+                          <li>
+                            <a href="/category/gpu"
+                              ><i class="fa-solid fa-microchip"></i>GPU</a
+                            >
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="col-sm-3">
+                        <ul class="multi-column-dropdown">
+                          <li>
+                            <a href="/category/ssd"
+                              ><i class="fa-solid fa-hard-drive"></i>SSD</a
+                            >
+                          </li>
+                          <li>
+                            <a href="/category/hdd"
+                              ><i class="fa-solid fa-hard-drive"></i>HDD</a
+                            >
+                          </li>
+                          <li>
+                            <a href="/category/psu"
+                              ><i class="fa-solid fa-plug"></i>Power Supply</a
+                            >
+                          </li>
+                          <li>
+                            <a href="/category/pccase"
+                              ><i class="fa-solid fa-computer"></i>PC Case</a
+                            >
+                          </li>
+                          <li>
+                            <a href="/category/cooling"
+                              ><i class="fa-solid fa-temperature-low"></i
+                              >Fan/Liquid Cooling</a
+                            >
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="col-sm-3"></div>
+                      <div class="clearfix"></div>
+                    </div>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a
+                    href="#"
+                    class="dropdown-toggle hyper"
+                    data-toggle="dropdown"
+                    ><i class="fa-solid fa-gears"></i
+                    ><span> Gaming Gear<b class="caret"></b></span
+                  ></a>
+                  <ul class="dropdown-menu multi multi1">
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <ul class="multi-column-dropdown">
+                          <li>
+                            <a href="/category/monitor"
+                              ><i class="fa-solid fa-desktop"></i>Màn Hình</a
+                            >
+                          </li>
+                          <li>
+                            <a href="/category/keyboard"
+                              ><i class="fa-solid fa-keyboard"></i>Bàn Phím</a
+                            >
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="col-sm-3">
+                        <ul class="multi-column-dropdown">
+                          <li>
+                            <a href="/category/mouse"
+                              ><i
+                                class="fa-sharp fa-solid fa-computer-mouse"
+                              ></i
+                              >Chuột</a
+                            >
+                          </li>
+                          <li>
+                            <a href="/category/headset"
+                              ><i class="fa-solid fa-headset"></i>Tai Nghe</a
+                            >
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="col-sm-3"></div>
+                      <div class="clearfix"></div>
+                    </div>
+                  </ul>
+                </li>
+                <li>
+                  <a href="/contact" class="hyper"
+                    ><i class="fa-solid fa-phone"></i><span> Liên Hệ</span></a
+                  >
+                </li>
+              </ul>
+            </div>
+          </nav>
+          <a href="/Cart" class="cart">
+            <span class="fa fa-shopping-cart my-cart-icon"
+              ><span class="badge badge-notify my-cart-badge"></span
+            ></span>
+          </a>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./js/LoginStatus.js"></script>
+
+    <!-- BANNER + FORM TÌM KIẾM -->
+    <div class="banner-bg">
+      <div class="container">
+        <div class="banner-info">
+          <h3></h3>
+          <!-- SEARCH FORM - TÌM KIẾM REALTIME -->
+          <div class="search-form" id="searchContainer">
+            <form action="#" method="post" onsubmit="return false;">
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="Tìm sản phẩm (CPU, GPU, RAM...)"
+                autocomplete="off"
+              />
+              <button type="submit" id="searchBtn">
+                <i class="fa fa-search"></i>
+              </button>
+            </form>
+            <!-- Kết quả tìm kiếm hiển thị ở đây -->
+            <div id="searchResults"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENT TOP - SẢN PHẨM -->
+    <div class="content-top">
+      <div class="container">
+        <div class="spec">
+          <h3>Giá Cực Sốc</h3>
+        </div>
+        <div class="tab-head">
+          <nav class="nav-sidebar">
+            <ul class="nav tabs">
+              <li class="active"><a href="#tab1" data-toggle="tab">CPU</a></li>
+              <li class=""><a href="#tab2" data-toggle="tab">GPU</a></li>
+              <li class=""><a href="#tab3" data-toggle="tab">Monitor</a></li>
+            </ul>
+          </nav>
+          <div class="tab-content tab-content-t">
+            <!-- Tab 1: CPU -->
+            <div class="tab-pane active text-style" id="tab1">
+              <div class="con-w3l">
+                <div class="col-md-3 m-wthree">
+                  <div class="col-m">
+                    <a
+                      href="#"
+                      data-toggle="modal"
+                      data-target="#myModal1"
+                      class="offer-img"
+                    >
+                      <img
+                        src="/images/cpu/i9.jpg"
+                        class="img-responsive"
+                        alt=""
+                      />
+                      <div class="offer">
+                        <p><span>Offer</span></p>
+                      </div>
+                    </a>
+                    <div class="mid-1">
+                      <div class="women">
+                        <h6>
+                          <a href="404.cshtml">Intel Core i9-13900K</a> 2.2 GHz -
+                          5.80 GHz | 24 Cores - 32 Threads
+                        </h6>
+                      </div>
+                      <div class="mid-2">
+                        <p>
+                          <label>12,490,000</label
+                          ><em class="item_price">15.800.000 VND</em>
+                        </p>
+                        <div class="block">
+                          <div class="starbox small ghosting"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                      </div>
+                      <div class="add">
+                        <button
+                          class="btn btn-danger my-cart-btn my-cart-b"
+                          data-id="1"
+                          data-name="Intel Core i9-13900K"
+                          data-summary="summary 5"
+                          data-price="15.800.000"
+                          data-quantity="1"
+                          data-image="/images/cpu/i9.jpg"
+                        >
+                          Add to Cart
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 m-wthree">
+                  <div class="col-m">
+                    <a
+                      href="#"
+                      data-toggle="modal"
+                      data-target="#myModal2"
+                      class="offer-img"
+                    >
+                      <img
+                        src="/images/cpu/i7.jpg"
+                        class="img-responsive"
+                        alt=""
+                      />
+                      <div class="offer">
+                        <p><span>Offer</span></p>
+                      </div>
+                    </a>
+                    <div class="mid-1">
+                      <div class="women">
+                        <h6>
+                          Intel Core i7 13700K 2.5GHz - 5.4GHz | 16 Cores - 24
+                          Threads
+                        </h6>
+                      </div>
+                      <div class="mid-2">
+                        <p>
+                          <label>14.900.000</label
+                          ><em class="item_price">13.900.000 VND</em>
+                        </p>
+                        <div class="block">
+                          <div class="starbox small ghosting"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                      </div>
+                      <div class="add">
+                        <button
+                          class="btn btn-danger my-cart-btn my-cart-b"
+                          data-id="2"
+                          data-name="Intel Core i7 13700K"
+                          data-summary="summary 5"
+                          data-price="13.900.000"
+                          data-quantity="1"
+                          data-image="/images/cpu/i7.jpg"
+                        >
+                          Add to Cart
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 m-wthree">
+                  <div class="col-m">
+                    <a
+                      href="#"
+                      data-toggle="modal"
+                      data-target="#myModal3"
+                      class="offer-img"
+                    >
+                      <img
+                        src="/images/cpu/i5.jpg"
+                        class="img-responsive"
+                        alt=""
+                      />
+                      <div class="offer">
+                        <p><span>Offer</span></p>
+                      </div>
+                    </a>
+                    <div class="mid-1">
+                      <div class="women">
+                        <h6>
+                          Intel Core i5-13500 1.8GHz - 4.8GHz | 14 Cores - 20
+                          Threads
+                        </h6>
+                      </div>
+                      <div class="mid-2">
+                        <p>
+                          <label>10.500.000</label
+                          ><em class="item_price">9.200.000 VND</em>
+                        </p>
+                        <div class="block">
+                          <div class="starbox small ghosting"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                      </div>
+                      <div class="add">
+                        <button
+                          class="btn btn-danger my-cart-btn my-cart-b"
+                          data-id="3"
+                          data-name="Intel Core i5-13500"
+                          data-summary="summary 5"
+                          data-price="9.200.000"
+                          data-quantity="1"
+                          data-image="/images/cpu/i5.jpg"
+                        >
+                          Add to Cart
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 m-wthree">
+                  <div class="col-m">
+                    <a
+                      href="#"
+                      data-toggle="modal"
+                      data-target="#myModal4"
+                      class="offer-img"
+                    >
+                      <img
+                        src="/images/cpu/i3.jpg"
+                        class="img-responsive"
+                        alt=""
+                      />
+                      <div class="offer">
+                        <p><span>Offer</span></p>
+                      </div>
+                    </a>
+                    <div class="mid-1">
+                      <div class="women">
+                        <h6>
+                          Intel Core i3 13100 3.4GHz - 4.5GHz | 4 Cores - 8
+                          Threads
+                        </h6>
+                      </div>
+                      <div class="mid-2">
+                        <p>
+                          <label>5.000.000</label
+                          ><em class="item_price">3.200.000 VND</em>
+                        </p>
+                        <div class="block">
+                          <div class="starbox small ghosting"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                      </div>
+                      <div class="add">
+                        <button
+                          class="btn btn-danger my-cart-btn my-cart-b"
+                          data-id="4"
+                          data-name="Intel Core i3 13100"
+                          data-summary="summary 5"
+                          data-price="3.200.000"
+                          data-quantity="1"
+                          data-image="/images/cpu/i3.jpg"
+                        >
+                          Add to Cart
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+
+            <!-- Tab 2: GPU -->
+            <div class="tab-pane text-style" id="tab2">
+              <div class="con-w3l">
+                <div class="col-md-3 m-wthree">
+                  <div class="col-m">
+                    <a
+                      href="#"
+                      data-toggle="modal"
+                      data-target="#myModal5"
+                      class="offer-img"
+                    >
+                      <img
+                        src="/images/gpu/of4.png"
+                        class="img-responsive"
+                        alt=""
+                      />
+                      <div class="offer">
+                        <p><span>Offer</span></p>
+                      </div>
+                    </a>
+                    <div class="mid-1">
+                      <div class="women">
+                        <h6>ROG Strix GeForce RTX 2080 Ti OC 11GB GDDR6</h6>
+                      </div>
+                      <div class="mid-2">
+                        <p>
+                          <label>21,500,000</label
+                          ><em class="item_price">17,990,000 VND</em>
+                        </p>
+                        <div class="block">
+                          <div class="starbox small ghosting"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                      </div>
+                      <div class="add">
+                        <button
+                          class="btn btn-danger my-cart-btn my-cart-b"
+                          data-id="5"
+                          data-name="ROG Strix GeForce RTX 2080 Ti OC 11GB GDDR6"
+                          data-summary="summary 5"
+                          data-price="17,990,000"
+                          data-quantity="1"
+                          data-image="/images/gpu/of4.png"
+                        >
+                          Add to Cart
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 m-wthree">
+                  <div class="col-m">
+                    <a
+                      href="#"
+                      data-toggle="modal"
+                      data-target="#myModal6"
+                      class="offer-img"
+                    >
+                      <img
+                        src="/images/gpu/of5.png"
+                        class="img-responsive"
+                        alt=""
+                      />
+                      <div class="offer">
+                        <p><span>Offer</span></p>
+                      </div>
+                    </a>
+                    <div class="mid-1">
+                      <div class="women">
+                        <h6>MSI RTX 2080TI Gaming X Trio 11GB GDDR6</h6>
+                      </div>
+                      <div class="mid-2">
+                        <p>
+                          <label>20,990,000</label
+                          ><em class="item_price">17,990,000 VND</em>
+                        </p>
+                        <div class="block">
+                          <div class="starbox small ghosting"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                      </div>
+                      <div class="add">
+                        <button
+                          class="btn btn-danger my-cart-btn my-cart-b"
+                          data-id="20"
+                          data-name="MSI RTX 2080TI Gaming X Trio 11GB GDDR6"
+                          data-summary="summary 5"
+                          data-price="17,990,000"
+                          data-quantity="1"
+                          data-image="/images/gpu/of5.png"
+                        >
+                          Add to Cart
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 m-wthree">
+                  <div class="col-m">
+                    <a
+                      href="#"
+                      data-toggle="modal"
+                      data-target="#myModal7"
+                      class="offer-img"
+                    >
+                      <img
+                        src="/images/gpu/of6.png"
+                        class="img-responsive"
+                        alt=""
+                      />
+                      <div class="offer">
+                        <p><span>Offer</span></p>
+                      </div>
+                    </a>
+                    <div class="mid-1">
+                      <div class="women">
+                        <h6>GIGABYTE RTX 2080 Gaming OC 8GB GDDR6</h6>
+                      </div>
+                      <div class="mid-2">
+                        <p>
+                          <label>10,500,000</label
+                          ><em class="item_price">8,790,000 VND</em>
+                        </p>
+                        <div class="block">
+                          <div class="starbox small ghosting"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                      </div>
+                      <div class="add add-2">
+                        <button
+                          class="btn btn-danger my-cart-btn my-cart-b"
+                          data-id="6"
+                          data-name="GIGABYTE RTX 2080 Gaming OC 8GB GDDR6"
+                          data-summary="summary 5"
+                          data-price="8,790,000"
+                          data-quantity="1"
+                          data-image="/images/gpu/of6.png"
+                        >
+                          Add to Cart
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 m-wthree">
+                  <div class="col-m">
+                    <a
+                      href="#"
+                      data-toggle="modal"
+                      data-target="#myModal8"
+                      class="offer-img"
+                    >
+                      <img
+                        src="/images/gpu/of7.png"
+                        class="img-responsive"
+                        alt=""
+                      />
+                      <div class="offer">
+                        <p><span>Offer</span></p>
+                      </div>
+                    </a>
+                    <div class="mid-1">
+                      <div class="women">
+                        <h6>AORUS GeForce RTX 2070 SUPER 8GB GDDR6</h6>
+                      </div>
+                      <div class="mid-2">
+                        <p>
+                          <label>8,500,000</label
+                          ><em class="item_price">6,490,000 VND</em>
+                        </p>
+                        <div class="block">
+                          <div class="starbox small ghosting"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                      </div>
+                      <div class="add">
+                        <button
+                          class="btn btn-danger my-cart-btn my-cart-b"
+                          data-id="7"
+                          data-name="AORUS GeForce RTX 2070 SUPER 8GB GDDR6"
+                          data-summary="summary 5"
+                          data-price="6,490,000"
+                          data-quantity="1"
+                          data-image="/images/gpu/of7.png"
+                        >
+                          Add to Cart
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+
+            <!-- Tab 3: Monitor -->
+            <div class="tab-pane text-style" id="tab3">
+              <div class="con-w3l">
+                <div class="col-md-3 m-wthree">
+                  <div class="col-m">
+                    <a
+                      href="#"
+                      data-toggle="modal"
+                      data-target="#myModal9"
+                      class="offer-img"
+                    >
+                      <img
+                        src="/images/monitor/of8.png"
+                        class="img-responsive"
+                        alt=""
+                      />
+                      <div class="offer">
+                        <p><span>Offer</span></p>
+                      </div>
+                    </a>
+                    <div class="mid-1">
+                      <div class="women">
+                        <h6>ASUS ROG Strix PG27UQ 27" IPS 4K 144Hz G-Sync</h6>
+                      </div>
+                      <div class="mid-2">
+                        <p>
+                          <label>50,600,000</label
+                          ><em class="item_price">39,990,000 VND</em>
+                        </p>
+                        <div class="block">
+                          <div class="starbox small ghosting"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                      </div>
+                      <div class="add">
+                        <button
+                          class="btn btn-danger my-cart-btn my-cart-b"
+                          data-id="8"
+                          data-name="ASUS ROG Strix PG27UQ 27"
+                          data-summary="summary 5"
+                          data-price="39,990,000"
+                          data-quantity="1"
+                          data-image="/images/monitor/of8.png"
+                        >
+                          Add to Cart
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 m-wthree">
+                  <div class="col-m">
+                    <a
+                      href="#"
+                      data-toggle="modal"
+                      data-target="#myModal10"
+                      class="offer-img"
+                    >
+                      <img
+                        src="/images/monitor/of9.png"
+                        class="img-responsive"
+                        alt=""
+                      />
+                      <div class="offer">
+                        <p><span>Offer</span></p>
+                      </div>
+                    </a>
+                    <div class="mid-1">
+                      <div class="women">
+                        <h6>LG 34WK95U-W 34" IPS 4K Nano UltraWide WUHD</h6>
+                      </div>
+                      <div class="mid-2">
+                        <p>
+                          <label>20,900,000</label
+                          ><em class="item_price">17,990,000 VND</em>
+                        </p>
+                        <div class="block">
+                          <div class="starbox small ghosting"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                      </div>
+                      <div class="add">
+                        <button
+                          class="btn btn-danger my-cart-btn my-cart-b"
+                          data-id="9"
+                          data-name="LG 34WK95U-W 34"
+                          data-summary="summary 5"
+                          data-price="17,990,000"
+                          data-quantity="1"
+                          data-image="/images/monitor/of9.png"
+                        >
+                          Add to Cart
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 m-wthree">
+                  <div class="col-m">
+                    <a
+                      href="#"
+                      data-toggle="modal"
+                      data-target="#myModal11"
+                      class="offer-img"
+                    >
+                      <img
+                        src="/images/monitor/of10.png"
+                        class="img-responsive"
+                        alt=""
+                      />
+                      <div class="offer">
+                        <p><span>Offer</span></p>
+                      </div>
+                    </a>
+                    <div class="mid-1">
+                      <div class="women">
+                        <h6>SAMSUNG QLED LC49HG90 49" 2K 144Hz</h6>
+                      </div>
+                      <div class="mid-2">
+                        <p>
+                          <label>47,888,000</label
+                          ><em class="item_price">29,990,000 VND</em>
+                        </p>
+                        <div class="block">
+                          <div class="starbox small ghosting"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                      </div>
+                      <div class="add">
+                        <button
+                          class="btn btn-danger my-cart-btn my-cart-b"
+                          data-id="10"
+                          data-name="SAMSUNG QLED LC49HG90 49"
+                          data-summary="summary 5"
+                          data-price="29,990,000"
+                          data-quantity="1"
+                          data-image="/images/monitor/of10.png"
+                        >
+                          Add to Cart
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 m-wthree">
+                  <div class="col-m">
+                    <a
+                      href="#"
+                      data-toggle="modal"
+                      data-target="#myModal12"
+                      class="offer-img"
+                    >
+                      <img
+                        src="/images/monitor/of11.png"
+                        class="img-responsive"
+                        alt=""
+                      />
+                      <div class="offer">
+                        <p><span>Offer</span></p>
+                      </div>
+                    </a>
+                    <div class="mid-1">
+                      <div class="women">
+                        <h6>Acer Predator X34P 34" IPS 2K 120Hz UW QHD</h6>
+                      </div>
+                      <div class="mid-2">
+                        <p>
+                          <label>26,490,000</label
+                          ><em class="item_price">24,590,000 VND</em>
+                        </p>
+                        <div class="block">
+                          <div class="starbox small ghosting"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                      </div>
+                      <div class="add">
+                        <button
+                          class="btn btn-danger my-cart-btn my-cart-b"
+                          data-id="11"
+                          data-name="Acer Predator X34P 34"
+                          data-summary="summary 5"
+                          data-price="24,590,000"
+                          data-quantity="1"
+                          data-image="/images/monitor/of11.png"
+                        >
+                          Add to Cart
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEWS CAROUSEL -->
+    <div class="container">
+      <div class="spec">
+        <br />
+        <h3>News</h3>
+      </div>
+    </div>
+
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+      <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+      </ol>
+      <div class="carousel-inner" role="listbox">
+        <div class="item active">
+          <a href="/category/cpu">
+            <img class="first-slide" src="/images/news.jpg" alt="First slide"
+          /></a>
+        </div>
+        <div class="item">
+          <a href="/gaminggear">
+            <img class="second-slide" src="/images/ps51.jpg" alt="Second slide"
+          /></a>
+        </div>
+        <div class="item">
+          <a href="/category/gpu"
+            ><img class="third-slide" src="/images/rtx.jpg" alt="Third slide"
+          /></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCT SALE -->
+    <div class="product">
+      <div class="container">
+        <div class="spec">
+          <h3>Sale</h3>
+          <div class="ser-t">
+            <span><i></i></span>
+          </div>
+        </div>
+        <div class="con-w3l">
+          <!-- Sản phẩm sale -->
+          <div class="col-md-3 pro-1">
+            <div class="col-m">
+              <a
+                href="#"
+                data-toggle="modal"
+                data-target="#myModal17"
+                class="offer-img"
+              >
+                <img src="/images/gpu/of4.png" class="img-responsive" alt="" />
+              </a>
+              <div class="mid-1">
+                <div class="women">
+                  <h6>ROG Strix GeForce RTX 2080 Ti OC 11GB GDDR6</h6>
+                </div>
+                <div class="mid-2">
+                  <p>
+                    <label>39,500,000</label
+                    ><em class="item_price">36,990,000 VND</em>
+                  </p>
+                  <div class="block">
+                    <div class="starbox small ghosting"></div>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="add add-2">
+                  <button
+                    class="btn btn-danger my-cart-btn my-cart-b"
+                    data-id="12"
+                    data-name="ROG Strix GeForce RTX 2080 Ti OC"
+                    data-summary="summary 5"
+                    data-price="36,990,000"
+                    data-quantity="1"
+                    data-image="/images/gpu/of4.png"
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 pro-1">
+            <div class="col-m">
+              <a
+                href="#"
+                data-toggle="modal"
+                data-target="#myModal18"
+                class="offer-img"
+              >
+                <img src="/images/gpu/of5.png" class="img-responsive" alt="" />
+              </a>
+              <div class="mid-1">
+                <div class="women">
+                  <h6>MSI RTX 2080TI Gaming X Trio 11GB GDDR6</h6>
+                </div>
+                <div class="mid-2">
+                  <p>
+                    <label>35,990,000</label
+                    ><em class="item_price">33,990,000 VND</em>
+                  </p>
+                  <div class="block">
+                    <div class="starbox small ghosting"></div>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="add">
+                  <button
+                    class="btn btn-danger my-cart-btn my-cart-b"
+                    data-id="13"
+                    data-name="MSI RTX 2080TI Gaming X Trio"
+                    data-summary="summary 5"
+                    data-price="33,990,000"
+                    data-quantity="1"
+                    data-image="/images/gpu/of5.png"
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 pro-1">
+            <div class="col-m">
+              <a
+                href="#"
+                data-toggle="modal"
+                data-target="#myModal17"
+                class="offer-img"
+              >
+                <img src="/images/gpu/of4.png" class="img-responsive" alt="" />
+              </a>
+              <div class="mid-1">
+                <div class="women">
+                  <h6>ROG Strix GeForce RTX 2080 Ti OC 11GB GDDR6</h6>
+                </div>
+                <div class="mid-2">
+                  <p>
+                    <label>39,500,000</label
+                    ><em class="item_price">36,990,000 VND</em>
+                  </p>
+                  <div class="block">
+                    <div class="starbox small ghosting"></div>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="add add-2">
+                  <button
+                    class="btn btn-danger my-cart-btn my-cart-b"
+                    data-id="14"
+                    data-name="ROG Strix GeForce RTX 2080 Ti OC"
+                    data-summary="summary 5"
+                    data-price="36,990,000"
+                    data-quantity="1"
+                    data-image="/images/gpu/of4.png"
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 pro-1">
+            <div class="col-m">
+              <a
+                href="#"
+                data-toggle="modal"
+                data-target="#myModal7"
+                class="offer-img"
+              >
+                <img src="/images/gpu/of6.png" class="img-responsive" alt="" />
+              </a>
+              <div class="mid-1">
+                <div class="women">
+                  <h6>GIGABYTE RTX 2080 Gaming OC 8GB GDDR6</h6>
+                </div>
+                <div class="mid-2">
+                  <p>
+                    <label>39,500,000</label
+                    ><em class="item_price">36,990,000 VND</em>
+                  </p>
+                  <div class="block">
+                    <div class="starbox small ghosting"></div>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="add add-2">
+                  <button
+                    class="btn btn-danger my-cart-btn my-cart-b"
+                    data-id="15"
+                    data-name="GIGABYTE RTX 2080 Gaming OC"
+                    data-summary="summary 5"
+                    data-price="36,990,000"
+                    data-quantity="1"
+                    data-image="/images/gpu/of6.png"
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 pro-1">
+            <div class="col-m">
+              <a
+                href="#"
+                data-toggle="modal"
+                data-target="#myModal8"
+                class="offer-img"
+              >
+                <img src="/images/gpu/of7.png" class="img-responsive" alt="" />
+              </a>
+              <div class="mid-1">
+                <div class="women">
+                  <h6>AORUS GeForce RTX 2070 SUPER 8GB GDDR6</h6>
+                </div>
+                <div class="mid-2">
+                  <p>
+                    <label>20,000,000</label
+                    ><em class="item_price">19,370,000 VND</em>
+                  </p>
+                  <div class="block">
+                    <div class="starbox small ghosting"></div>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="add">
+                  <button
+                    class="btn btn-danger my-cart-btn my-cart-b"
+                    data-id="16"
+                    data-name="AORUS GeForce RTX 2070 SUPER"
+                    data-summary="summary 5"
+                    data-price="19,370,000"
+                    data-quantity="1"
+                    data-image="/images/gpu/of7.png"
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 pro-1">
+            <div class="col-m">
+              <a
+                href="#"
+                data-toggle="modal"
+                data-target="#myModal20"
+                class="offer-img"
+              >
+                <img
+                  src="/images/mainboard/of19.png"
+                  class="img-responsive"
+                  alt=""
+                />
+                <div class="offer">
+                  <p><span>Offer</span></p>
+                </div>
+              </a>
+              <div class="mid-1">
+                <div class="women">
+                  <h6>MSI MEG Z390 Godlike LGA1151v2</h6>
+                </div>
+                <div class="mid-2">
+                  <p>
+                    <label>15,000,000</label
+                    ><em class="item_price">14,790,000 VND</em>
+                  </p>
+                  <div class="block">
+                    <div class="starbox small ghosting"></div>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="add">
+                  <button
+                    class="btn btn-danger my-cart-btn my-cart-b"
+                    data-id="17"
+                    data-name="MSI MEG Z390 Godlike LGA1151v2"
+                    data-summary="summary 5"
+                    data-price="14,790,000"
+                    data-quantity="1"
+                    data-image="/images/mainboard/of19.png"
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 pro-1">
+            <div class="col-m">
+              <a
+                href="#"
+                data-toggle="modal"
+                data-target="#myModal21"
+                class="offer-img"
+              >
+                <img
+                  src="/images/monitor/of8.png"
+                  class="img-responsive"
+                  alt=""
+                />
+              </a>
+              <div class="mid-1">
+                <div class="women">
+                  <h6>ASUS ROG Strix PG27UQ 27" IPS 4K 144Hz G-Sync</h6>
+                </div>
+                <div class="mid-2">
+                  <p>
+                    <label>70,000,000</label
+                    ><em class="item_price">69,990,000 VND</em>
+                  </p>
+                  <div class="block">
+                    <div class="starbox small ghosting"></div>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="add">
+                  <button
+                    class="btn btn-danger my-cart-btn my-cart-b"
+                    data-id="18"
+                    data-name="ASUS ROG Strix PG27UQ 27"
+                    data-summary="summary 5"
+                    data-price="69,990,000"
+                    data-quantity="1"
+                    data-image="/images/monitor/of8.png"
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 pro-1">
+            <div class="col-m">
+              <a
+                href="#"
+                data-toggle="modal"
+                data-target="#myModal22"
+                class="offer-img"
+              >
+                <img
+                  src="/images/monitor/of10.png"
+                  class="img-responsive"
+                  alt=""
+                />
+              </a>
+              <div class="mid-1">
+                <div class="women">
+                  <h6>SAMSUNG QLED LC49HG90 49" 2K 144Hz</h6>
+                </div>
+                <div class="mid-2">
+                  <p>
+                    <label>47,888,000</label
+                    ><em class="item_price">29,990,000 VND</em>
+                  </p>
+                  <div class="block">
+                    <div class="starbox small ghosting"></div>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="add">
+                  <button
+                    class="btn btn-danger my-cart-btn my-cart-b"
+                    data-id="19"
+                    data-name="SAMSUNG QLED LC49HG90"
+                    data-summary="summary 5"
+                    data-price="29,990,000"
+                    data-quantity="1"
+                    data-image="/images/monitor/of10.png"
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div class="container">
+        <div class="col-md-3 footer-grid">
+          <h3>About Us</h3>
+          <p>TKL Computer - Where you can put your trust !</p>
+        </div>
+        <div class="col-md-3 footer-grid">
+          <h3>Menu</h3>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/product">PC Component</a></li>
+            <li><a href="404.cshtml">Gaming Gear</a></li>
+            <li><a href="/contact">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3 footer-grid">
+          <h3>Customer Services</h3>
+          <ul>
+            <li><a href="404.cshtml">Shipping</a></li>
+            <li><a href="/terms">Terms & Conditions</a></li>
+            <li><a href="404.cshtml">FAQs</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="404.cshtml">Online Shopping</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3 footer-grid">
+          <h3>My Account</h3>
+          <ul>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/signup">Register</a></li>
+            <li><a href="404.cshtml">Wishlist</a></li>
+          </ul>
+        </div>
+        <div class="clearfix"></div>
+        <div class="footer-bottom">
+          <h2>
+            <a href="/"
+              ><b>P<br />C</b> TKL Computer Store<span
+                >Prestige is more precious than gold</span
+              ></a
+            >
+          </h2>
+          <p class="fo-para">TKL Computer - Where you can put your trust !</p>
+          <ul class="social-fo">
+            <li>
+              <a href="#" class="face"
+                ><i class="fa fa-facebook" aria-hidden="true"></i
+              ></a>
+            </li>
+          </ul>
+          <div class="address">
+            <div class="col-md-4 fo-grid1">
+              <p>
+                <i class="fa fa-home" aria-hidden="true"></i>235 Hoang Quoc
+                Viet, Cau Giay, Hanoi City.
+              </p>
+            </div>
+            <div class="col-md-4 fo-grid1">
+              <p>
+                <i class="fa fa-phone" aria-hidden="true"></i>+84 9886688999 ,
+                +84 877686868
+              </p>
+            </div>
+            <div class="col-md-4 fo-grid1">
+              <p>
+                <a href="mailto:comshop.1@@sale.tklstore.com"
+                  ><i class="fa fa-envelope-o" aria-hidden="true"></i
+                  >comshop.1@@sale.tklstore.com</a
+                >
+              </p>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a href="#" id="toTop" style="display: block">
+      <span id="toTopHover" style="opacity: 1"> </span
+    ></a>
+
+    <!-- SCRIPTS -->
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/addandcart.js"></script>
+
+    <!-- CHATBOT -->
+    <div
+      class="chatbot-sucvn"
+      style="
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 99999;
+        font-family: Arial, sans-serif;
+      "
+    >
+      <div
+        class="chat-header-btn"
+        onclick="toggleChat()"
+        style="
+          background: #2563eb;
+          color: white;
+          padding: 12px 20px;
+          border-radius: 25px;
+          cursor: pointer;
+          font-weight: bold;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        "
+      >
+        💬 Tư vấn linh kiện AI
+      </div>
+      <div
+        class="chat-body"
+        id="chatBody"
+        style="
+          display: none;
+          flex-direction: column;
+          position: absolute;
+          bottom: 60px;
+          right: 0;
+          width: 350px;
+          height: 450px;
+          background: white;
+          border: 1px solid #e2e8f0;
+          border-radius: 16px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+          overflow: hidden;
+        "
+      >
+        <div
+          style="
+            background: #2563eb;
+            color: white;
+            padding: 16px;
+            font-weight: bold;
+            font-size: 16px;
+            text-align: center;
+            border-bottom: 1px solid #1e4bb3;
+          "
+        >
+          Trợ lý AI - TKL Computer
+        </div>
+        <div
+          id="chatContent"
+          style="
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+          "
+        >
+          <div style="text-align: left; margin-bottom: 12px">
+            <span
+              style="
+                background: #f1f5f9;
+                color: #334155;
+                padding: 8px 14px;
+                border-radius: 16px 16px 16px 0;
+                display: inline-block;
+                max-width: 75%;
+                font-size: 14px;
+              "
+            >
+              <b>Bot:</b> Chào bạn! Mình là Trợ lý AI của TKL Computer. Bạn cần
+              tư vấn linh kiện PC hay cấu hình máy thế nào để mình hỗ trợ nhé?
+            </span>
+          </div>
+        </div>
+        <div
+          style="
+            padding: 12px;
+            border-top: 1px solid #e2e8f0;
+            background: white;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+          "
+        >
+          <input
+            type="text"
+            id="chatInput"
+            placeholder="Hỏi AI về CPU, GPU, cấu hình..."
+            style="
+              flex: 1;
+              padding: 10px 14px;
+              border: 1px solid #cbd5e1;
+              border-radius: 20px;
+              outline: none;
+              font-size: 14px;
+              color: #333;
+            "
+          />
+          <button
+            onclick="sendMessage()"
+            style="
+              background: #2563eb;
+              color: white;
+              border: none;
+              padding: 10px 16px;
+              border-radius: 20px;
+              cursor: pointer;
+              font-weight: bold;
+              font-size: 14px;
+            "
+          >
+            Gửi
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- JQUERY + SEARCH.JS - CHỈ THÊM 1 LẦN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/search.js"></script>
+    <script src="/js/chatbot.js"></script>
+  </body>
+</html>

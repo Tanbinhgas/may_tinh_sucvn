@@ -1,0 +1,343 @@
+@page "/category/{slug}"
+@model may_tinh_sucvn.Pages.CategoryModel
+@{ Layout = null; }
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/images/logo-1.png" />
+    <title>@Model.Category?.Name - TKL Computer</title>
+    <link href="/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="/css/style.css" rel="stylesheet" type="text/css" />
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <link href="/css/font-awesome.css" rel="stylesheet" type="text/css" />
+    <link href="//fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+    <link href="//fonts.googleapis.com/css?family=Noto+Sans:400,700" rel="stylesheet" type="text/css" />
+    <style>
+        .cat-wrap { max-width:1200px; margin:0 auto; padding:24px 20px 60px; font-family:'Montserrat', sans-serif; }
+        .cat-title { font-size:1.6rem; margin:8px 0 2px; }
+        .cat-sub { color:#777; margin-bottom:22px; }
+        .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:20px; }
+        .prod-card { background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.06); display:flex; flex-direction:column; transition:transform .15s, box-shadow .15s; }
+        .prod-card:hover { transform:translateY(-4px); box-shadow:0 6px 18px rgba(0,0,0,.12); }
+        .prod-card .thumb { height:180px; display:flex; align-items:center; justify-content:center; background:#fafafa; padding:12px; }
+        .prod-card .thumb img { max-height:100%; max-width:100%; object-fit:contain; }
+        .prod-card .body { padding:14px; display:flex; flex-direction:column; flex:1; }
+        .prod-card .brand { font-size:.72rem; text-transform:uppercase; letter-spacing:.4px; color:#999; }
+        .prod-card .name { font-size:.92rem; font-weight:600; margin:4px 0 10px; line-height:1.35; min-height:2.6em; color:#222; text-decoration:none; display:block; }
+        .prod-card a.name:hover { color:#c0392b; }
+        .prod-card a.thumb { text-decoration:none; }
+        .prod-card .price { font-size:1.12rem; font-weight:700; color:#c0392b; margin-top:auto; }
+        .prod-card form { margin-top:12px; }
+        .prod-card button { width:100%; padding:9px; border:none; border-radius:6px; background:#1a1a1a; color:#fff; cursor:pointer; font-size:.9rem; }
+        .prod-card button:hover:not([disabled]) { background:#c0392b; }
+        .prod-card button[disabled] { background:#bbb; cursor:not-allowed; }
+        .empty { text-align:center; color:#888; padding:60px 0; }
+    </style>
+</head>
+<body>
+    <div class="header">
+      <div class="container">
+        <div class="logo">
+          <h1>
+            <a href="/"
+              ><b>P<br />C</b>TKL Computer<span
+                >Prestige is more precious than gold</span
+              ></a
+            >
+          </h1>
+        </div>
+        <div class="head-t">
+          <ul class="card">
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+            	<li><a href="/Profile"><i class="fa fa-user" aria-hidden="true"></i>@(User.FindFirst("FullName")?.Value ?? User.Identity!.Name)</a></li>
+            	<li><a href="/Logout"><i class="fa fa-sign-out" aria-hidden="true"></i>Đăng Xuất</a></li>
+            }
+            else
+            {
+            	<li><a href="/login"><i class="fa fa-user" aria-hidden="true"></i>Đăng Nhập</a></li>
+            	<li><a href="/signup"><i class="fa fa-arrow-right" aria-hidden="true"></i>Đăng Ký</a></li>
+            }
+          </ul>
+        </div>
+        <div class="header-ri">
+          <ul class="social-top">
+            <li>
+              <a href="#" class="icon facebook"
+                ><i class="fa fa-facebook" aria-hidden="true"></i><span></span
+              ></a>
+            </li>
+          </ul>
+        </div>
+        <div class="nav-top">
+          <nav class="navbar navbar-default">
+            <div class="navbar-header nav_2">
+              <button
+                type="button"
+                class="navbar-toggle collapsed navbar-toggle1"
+                data-toggle="collapse"
+                data-target="#bs-megadropdown-tabs"
+              >
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
+              <ul class="nav navbar-nav">
+                <li>
+                  <a href="/" class="hyper"><span>Trang Chủ</span></a>
+                </li>
+                <li class="dropdown">
+                  <a
+                    href="#"
+                    class="dropdown-toggle hyper"
+                    data-toggle="dropdown"
+                    ><i class="fa-solid fa-boxes-stacked"></i
+                    ><span> Linh Kiện PC<b class="caret"></b></span
+                  ></a>
+                  <ul class="dropdown-menu multi">
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <ul class="multi-column-dropdown">
+                          <li>
+                            <a href="/category/mainboard"
+                              ><i class="fa-solid fa-microchip"></i>Mainboard</a
+                            >
+                          </li>
+                          <li>
+                            <a href="/category/cpu"
+                              ><i class="fa-solid fa-microchip"></i>CPU</a
+                            >
+                          </li>
+                          <li>
+                            <a href="/category/ram">
+                              <i class="fa-solid fa-memory"></i>RAM</a
+                            >
+                          </li>
+                          <li>
+                            <a href="/category/gpu"
+                              ><i class="fa-solid fa-microchip"></i>GPU</a
+                            >
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="col-sm-3">
+                        <ul class="multi-column-dropdown">
+                          <li>
+                            <a href="/category/ssd"
+                              ><i class="fa-solid fa-hard-drive"></i>SSD</a
+                            >
+                          </li>
+                          <li>
+                            <a href="/category/hdd"
+                              ><i class="fa-solid fa-hard-drive"></i>HDD</a
+                            >
+                          </li>
+                          <li>
+                            <a href="/category/psu"
+                              ><i class="fa-solid fa-plug"></i>Power Supply</a
+                            >
+                          </li>
+                          <li>
+                            <a href="/category/pccase"
+                              ><i class="fa-solid fa-computer"></i>PC Case</a
+                            >
+                          </li>
+                          <li>
+                            <a href="/category/cooling"
+                              ><i class="fa-solid fa-temperature-low"></i
+                              >Fan/Liquid Cooling</a
+                            >
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="col-sm-3"></div>
+                      <div class="clearfix"></div>
+                    </div>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a
+                    href="#"
+                    class="dropdown-toggle hyper"
+                    data-toggle="dropdown"
+                    ><i class="fa-solid fa-gears"></i
+                    ><span> Gaming Gear<b class="caret"></b></span
+                  ></a>
+                  <ul class="dropdown-menu multi multi1">
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <ul class="multi-column-dropdown">
+                          <li>
+                            <a href="/category/monitor"
+                              ><i class="fa-solid fa-desktop"></i>Màn Hình</a
+                            >
+                          </li>
+                          <li>
+                            <a href="/category/keyboard"
+                              ><i class="fa-solid fa-keyboard"></i>Bàn Phím</a
+                            >
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="col-sm-3">
+                        <ul class="multi-column-dropdown">
+                          <li>
+                            <a href="/category/mouse"
+                              ><i
+                                class="fa-sharp fa-solid fa-computer-mouse"
+                              ></i
+                              >Chuột</a
+                            >
+                          </li>
+                          <li>
+                            <a href="/category/headset"
+                              ><i class="fa-solid fa-headset"></i>Tai Nghe</a
+                            >
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="col-sm-3"></div>
+                      <div class="clearfix"></div>
+                    </div>
+                  </ul>
+                </li>
+                <li>
+                  <a href="/contact" class="hyper"
+                    ><i class="fa-solid fa-phone"></i><span> Liên Hệ</span></a
+                  >
+                </li>
+              </ul>
+            </div>
+          </nav>
+          <a href="/Cart" class="cart">
+            <span class="fa fa-shopping-cart my-cart-icon"
+              ><span class="badge badge-notify my-cart-badge"></span
+            ></span>
+          </a>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cat-wrap">
+        <h1 class="cat-title">@Model.Category?.Name</h1>
+        <p class="cat-sub">@Model.Products.Count sản phẩm</p>
+
+        @if (Model.Products.Count == 0)
+        {
+            <div class="empty">Chưa có sản phẩm trong danh mục này.</div>
+        }
+        else
+        {
+            <div class="grid">
+                @foreach (var p in Model.Products)
+                {
+                    <div class="prod-card">
+                        <a class="thumb" href="/product/@p.Slug">
+                            <img src="@p.ImageUrl" alt="@p.Name" loading="lazy"
+                                 onerror="this.onerror=null;this.src='/images/logo-1.png';" />
+                        </a>
+                        <div class="body">
+                            <span class="brand">@p.Brand</span>
+                            <a class="name" href="/product/@p.Slug">@p.Name</a>
+                            <span class="price">@p.Price.ToString("#,##0")₫</span>
+                            <form method="post" asp-page="/Cart" asp-page-handler="Add">
+                                <input type="hidden" name="productId" value="@p.Id" />
+                                <input type="hidden" name="quantity" value="1" />
+                                <button type="submit" disabled="@(p.Stock <= 0)">
+                                    @(p.Stock <= 0 ? "Hết hàng" : "Thêm vào giỏ")
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div class="container">
+        <div class="col-md-3 footer-grid">
+          <h3>About Us</h3>
+          <p>TKL Computer - Where you can put your trust !</p>
+        </div>
+        <div class="col-md-3 footer-grid">
+          <h3>Menu</h3>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/product">PC Component</a></li>
+            <li><a href="404.cshtml">Gaming Gear</a></li>
+            <li><a href="/contact">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3 footer-grid">
+          <h3>Customer Services</h3>
+          <ul>
+            <li><a href="404.cshtml">Shipping</a></li>
+            <li><a href="/terms">Terms & Conditions</a></li>
+            <li><a href="404.cshtml">FAQs</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="404.cshtml">Online Shopping</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3 footer-grid">
+          <h3>My Account</h3>
+          <ul>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/signup">Register</a></li>
+            <li><a href="404.cshtml">Wishlist</a></li>
+          </ul>
+        </div>
+        <div class="clearfix"></div>
+        <div class="footer-bottom">
+          <h2>
+            <a href="/"
+              ><b>P<br />C</b> TKL Computer Store<span
+                >Prestige is more precious than gold</span
+              ></a
+            >
+          </h2>
+          <p class="fo-para">TKL Computer - Where you can put your trust !</p>
+          <ul class="social-fo">
+            <li>
+              <a href="#" class="face"
+                ><i class="fa fa-facebook" aria-hidden="true"></i
+              ></a>
+            </li>
+          </ul>
+          <div class="address">
+            <div class="col-md-4 fo-grid1">
+              <p>
+                <i class="fa fa-home" aria-hidden="true"></i>235 Hoang Quoc
+                Viet, Cau Giay, Hanoi City.
+              </p>
+            </div>
+            <div class="col-md-4 fo-grid1">
+              <p>
+                <i class="fa fa-phone" aria-hidden="true"></i>+84 9886688999 ,
+                +84 877686868
+              </p>
+            </div>
+            <div class="col-md-4 fo-grid1">
+              <p>
+                <a href="mailto:comshop.1@@sale.tklstore.com"
+                  ><i class="fa fa-envelope-o" aria-hidden="true"></i
+                  >comshop.1@@sale.tklstore.com</a
+                >
+              </p>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/bootstrap.js"></script>
+</body>
+</html>

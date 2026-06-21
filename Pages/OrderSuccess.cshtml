@@ -1,0 +1,71 @@
+@page
+@using may_tinh_sucvn.Models
+@using may_tinh_sucvn.Pages.Admin
+@model may_tinh_sucvn.Pages.OrderSuccessModel
+@{
+    Layout = null;
+    var o = Model.Order!;
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/images/logo-1.png" />
+    <title>Đặt hàng thành công - TKL Computer</title>
+    <link href="//fonts.googleapis.com/css?family=Montserrat:400,600,700" rel="stylesheet" />
+    <link href="/css/store.css" rel="stylesheet" />
+</head>
+<body>
+    <header class="store-header">
+        <a class="brand" href="/"><img src="/images/logo-1.png" alt="TKL Computer" /> TKL Computer</a>
+        <nav class="store-nav">
+            <a href="/">Trang chủ</a>
+            <a href="/MyOrders">Đơn của tôi</a>
+                <a href="/Profile">Tài khoản</a>
+            <form method="post" asp-page="/Logout"><button type="submit">Đăng xuất</button></form>
+        </nav>
+    </header>
+
+    <div class="wrap">
+        <div class="panel">
+            <div class="success-hero">
+                <div class="check">✓</div>
+                <h1>Đặt hàng thành công!</h1>
+                <p class="muted">Mã đơn hàng <strong>#@o.Id</strong> · Trạng thái:
+                    <span class="badge @AdminFormat.StatusBadge(o.Status)">@AdminFormat.StatusText(o.Status)</span>
+                </p>
+            </div>
+
+            <div class="panel-body">
+                <table>
+                    <thead><tr><th>Sản phẩm</th><th class="right">Đơn giá</th><th class="right">SL</th><th class="right">Thành tiền</th></tr></thead>
+                    <tbody>
+                        @foreach (var it in o.Items)
+                        {
+                            <tr>
+                                <td>@it.ProductName</td>
+                                <td class="right">@it.Price.ToString("#,##0")₫</td>
+                                <td class="right">@it.Quantity</td>
+                                <td class="right">@((it.Price * it.Quantity).ToString("#,##0"))₫</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="summary-total"><span>Tổng cộng</span><span class="amount">@o.TotalPrice.ToString("#,##0")₫</span></div>
+
+                <p style="margin-top:18px"><strong>Giao tới:</strong> @o.ShippingAddress<br /><strong>SĐT:</strong> @o.Phone</p>
+                @if (!string.IsNullOrWhiteSpace(o.Note))
+                {
+                    <p><strong>Ghi chú:</strong> @o.Note</p>
+                }
+
+                <div style="margin-top:20px">
+                    <a href="/MyOrders" class="btn btn-dark">Xem đơn hàng của tôi</a>
+                    <a href="/" class="btn btn-soft">Tiếp tục mua sắm</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

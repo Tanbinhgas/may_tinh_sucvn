@@ -1,0 +1,213 @@
+@page "/product/{slug?}"
+@model may_tinh_sucvn.Pages.ProductModel
+@{
+    Layout = null;
+    var p = Model.Product!;
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/images/logo-1.png" />
+    <title>@p.Name - TKL Computer</title>
+    <link href="//fonts.googleapis.com/css?family=Montserrat:400,600,700" rel="stylesheet" />
+    <link href="//fonts.googleapis.com/css?family=Noto+Sans:400,700" rel="stylesheet" />
+    <link href="/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="/css/font-awesome.css" rel="stylesheet" type="text/css" />
+    <link href="/css/store.css" rel="stylesheet" />
+    <style>
+        .breadcrumb { font-size:.88rem; color:#64748b; margin-bottom:18px; }
+        .breadcrumb a { color:#64748b; } .breadcrumb a:hover { color:#c0392b; }
+        .detail { display:grid; grid-template-columns:minmax(280px,420px) 1fr; gap:30px; align-items:start; }
+        @@media (max-width:760px){ .detail { grid-template-columns:1fr; } }
+        .detail .gallery { background:#fff; border-radius:12px; padding:24px; box-shadow:0 1px 6px rgba(0,0,0,.07); text-align:center; }
+        .detail .gallery img { max-width:100%; max-height:380px; object-fit:contain; }
+        .detail .info { background:#fff; border-radius:12px; padding:26px; box-shadow:0 1px 6px rgba(0,0,0,.07); }
+        .detail .info .brand { font-size:.78rem; text-transform:uppercase; letter-spacing:.5px; color:#94a3b8; }
+        .detail .info h1 { font-size:1.5rem; margin:6px 0 14px; line-height:1.35; }
+        .detail .info .price { font-size:1.9rem; font-weight:700; color:#c0392b; margin-bottom:14px; }
+        .detail .info .stock { margin-bottom:18px; font-size:.92rem; }
+        .detail .info .stock .in { color:#16a34a; font-weight:600; }
+        .detail .info .stock .out { color:#c0392b; font-weight:600; }
+        .buyform { display:flex; gap:12px; align-items:center; margin-top:8px; }
+        .buyform input { width:84px; }
+        .desc { background:#fff; border-radius:12px; padding:24px 26px; box-shadow:0 1px 6px rgba(0,0,0,.07); margin-top:24px; }
+        .desc h2 { font-size:1.1rem; margin:0 0 12px; }
+        .desc p { line-height:1.7; color:#374151; white-space:pre-line; }
+        .rel-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:18px; }
+        .rel-card { background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,.06); display:block; color:inherit; }
+        .rel-card:hover { box-shadow:0 6px 16px rgba(0,0,0,.12); }
+        .rel-card .t { height:150px; display:flex; align-items:center; justify-content:center; background:#fafafa; padding:10px; }
+        .rel-card .t img { max-height:100%; max-width:100%; object-fit:contain; }
+        .rel-card .b { padding:12px; }
+        .rel-card .b .n { font-size:.88rem; font-weight:600; min-height:2.4em; line-height:1.3; }
+        .rel-card .b .pr { color:#c0392b; font-weight:700; margin-top:6px; }
+    </style>
+</head>
+<body>
+    <header class="store-header">
+        <a class="brand" href="/"><img src="/images/logo-1.png" alt="TKL Computer" /> TKL Computer</a>
+        <nav class="store-nav">
+            <a href="/">Trang chủ</a>
+            <a href="/Cart">Giỏ hàng</a>
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <a href="/MyOrders">Đơn của tôi</a>
+                <a href="/Profile">Tài khoản</a>
+                <form method="post" asp-page="/Logout"><button type="submit">Đăng xuất</button></form>
+            }
+            else
+            {
+                <a href="/login">Đăng nhập</a>
+            }
+        </nav>
+    </header>
+
+    <div class="wrap">
+        <div class="breadcrumb">
+            <a href="/">Trang chủ</a>
+            @if (p.Category is not null)
+            {
+                <span> / </span><a href="/category/@p.Category.Slug">@p.Category.Name</a>
+            }
+            <span> / </span><span>@p.Name</span>
+        </div>
+
+        <div class="detail">
+            <div class="gallery">
+                <img src="@(p.ImageUrl ?? "/images/logo-1.png")" alt="@p.Name"
+                     onerror="this.onerror=null;this.src='/images/logo-1.png';" />
+            </div>
+            <div class="info">
+                <div class="brand">@p.Brand</div>
+                <h1>@p.Name</h1>
+                <div class="price">@p.Price.ToString("#,##0")₫</div>
+                <div class="stock">
+                    @if (p.Stock > 0)
+                    {
+                        <span class="in">● Còn hàng</span> <span class="muted">(@p.Stock sản phẩm)</span>
+                    }
+                    else
+                    {
+                        <span class="out">● Hết hàng</span>
+                    }
+                </div>
+
+                <form method="post" asp-page="/Cart" asp-page-handler="Add" class="buyform">
+                    <input type="hidden" name="productId" value="@p.Id" />
+                    <input type="number" name="quantity" value="1" min="1" max="@p.Stock" @(p.Stock <= 0 ? "disabled" : "") />
+                    <button type="submit" class="btn btn-primary" disabled="@(p.Stock <= 0)">
+                        @(p.Stock <= 0 ? "Hết hàng" : "Thêm vào giỏ")
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(p.Description))
+        {
+            <div class="desc">
+                <h2>Mô tả sản phẩm</h2>
+                <p>@p.Description</p>
+            </div>
+        }
+
+        @if (Model.Related.Count > 0)
+        {
+            <h2 class="page-title" style="font-size:1.25rem;margin-top:34px">Sản phẩm liên quan</h2>
+            <div class="rel-grid">
+                @foreach (var r in Model.Related)
+                {
+                    <a class="rel-card" href="/product/@r.Slug">
+                        <div class="t"><img src="@(r.ImageUrl ?? "/images/logo-1.png")" alt="@r.Name"
+                             onerror="this.onerror=null;this.src='/images/logo-1.png';" /></div>
+                        <div class="b">
+                            <div class="n">@r.Name</div>
+                            <div class="pr">@r.Price.ToString("#,##0")₫</div>
+                        </div>
+                    </a>
+                }
+            </div>
+        }
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div class="container">
+        <div class="col-md-3 footer-grid">
+          <h3>About Us</h3>
+          <p>TKL Computer - Where you can put your trust !</p>
+        </div>
+        <div class="col-md-3 footer-grid">
+          <h3>Menu</h3>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/product">PC Component</a></li>
+            <li><a href="404.cshtml">Gaming Gear</a></li>
+            <li><a href="/contact">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3 footer-grid">
+          <h3>Customer Services</h3>
+          <ul>
+            <li><a href="404.cshtml">Shipping</a></li>
+            <li><a href="/terms">Terms & Conditions</a></li>
+            <li><a href="404.cshtml">FAQs</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="404.cshtml">Online Shopping</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3 footer-grid">
+          <h3>My Account</h3>
+          <ul>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/signup">Register</a></li>
+            <li><a href="404.cshtml">Wishlist</a></li>
+          </ul>
+        </div>
+        <div class="clearfix"></div>
+        <div class="footer-bottom">
+          <h2>
+            <a href="/"
+              ><b>P<br />C</b> TKL Computer Store<span
+                >Prestige is more precious than gold</span
+              ></a
+            >
+          </h2>
+          <p class="fo-para">TKL Computer - Where you can put your trust !</p>
+          <ul class="social-fo">
+            <li>
+              <a href="#" class="face"
+                ><i class="fa fa-facebook" aria-hidden="true"></i
+              ></a>
+            </li>
+          </ul>
+          <div class="address">
+            <div class="col-md-4 fo-grid1">
+              <p>
+                <i class="fa fa-home" aria-hidden="true"></i>235 Hoang Quoc
+                Viet, Cau Giay, Hanoi City.
+              </p>
+            </div>
+            <div class="col-md-4 fo-grid1">
+              <p>
+                <i class="fa fa-phone" aria-hidden="true"></i>+84 9886688999 ,
+                +84 877686868
+              </p>
+            </div>
+            <div class="col-md-4 fo-grid1">
+              <p>
+                <a href="mailto:comshop.1@@sale.tklstore.com"
+                  ><i class="fa fa-envelope-o" aria-hidden="true"></i
+                  >comshop.1@@sale.tklstore.com</a
+                >
+              </p>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+</body>
+</html>

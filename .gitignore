@@ -1,0 +1,13 @@
+# Build
+bin/
+obj/
+
+# Node (backend cũ đã loại bỏ)
+node_modules/
+
+# IDE / user
+.vs/
+*.user
+
+# Secrets cục bộ
+appsettings.*.local.json
