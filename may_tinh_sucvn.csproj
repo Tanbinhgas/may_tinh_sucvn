@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -6,7 +6,24 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>may_tinh_sucvn</RootNamespace>
     <UserSecretsId>8c7048ef-fb48-4332-8a27-8e804b2bc044</UserSecretsId>
+
+    <!-- Metadata phát hành (SemVer) -->
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <InformationalVersion>1.0.0</InformationalVersion>
+    <Product>TKL Computer</Product>
+    <Authors>TKL Computer</Authors>
+    <Company>TKL Computer</Company>
+    <Description>Website thương mại điện tử linh kiện máy tính TKL Computer — ASP.NET Core Razor Pages + EF Core (SQL Server).</Description>
   </PropertyGroup>
+
+  <!-- Project test nằm trong thư mục con tests/ — loại khỏi build của ứng dụng web -->
+  <ItemGroup>
+    <Compile Remove="tests/**/*.cs" />
+    <Content Remove="tests/**/*" />
+    <None Remove="tests/**/*" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.0" />
