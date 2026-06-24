@@ -41,11 +41,17 @@ builder.Services.AddRazorPages(opt =>
     opt.Conventions.AuthorizePage("/OrderSuccess");
 });
 
+// ── Controllers (cho API chatbot) ──────────────────────────
+builder.Services.AddControllers();  // ← THÊM DÒNG NÀY
+
 // ── Dependency Injection: business services ────────────────
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddHttpContextAccessor();
+
+// ── HttpClient cho Chatbot ──────────────────────────────────
+builder.Services.AddHttpClient();   // ← THÊM DÒNG NÀY
 
 var app = builder.Build();
 
@@ -63,6 +69,7 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 app.MapRazorPages().WithStaticAssets();
+app.MapControllers();  // ← THÊM DÒNG NÀY (để API hoạt động)
 
 // (Tuỳ chọn) tạo admin đầu tiên từ cấu hình "Seed:Admin" nếu DB chưa có admin nào.
 // Không có credential mặc định nào bị hard-code — phải tự đặt trong user-secrets/appsettings.
