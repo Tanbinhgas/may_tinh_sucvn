@@ -7,7 +7,7 @@ public class Product
 {
     public int Id { get; set; }
 
-    public int CategoryId { get; set; }
+    public int CategoryId { get; set; }                //thi làm Tạo Model Product cho hệ thống quản lý sản phẩm
 
     [Required, MaxLength(200)]
     public string Name { get; set; } = string.Empty;
