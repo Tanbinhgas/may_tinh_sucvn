@@ -31,6 +31,8 @@ wwwroot/     # CSS / JS / ảnh / fonts
 - Chi tiết sản phẩm `/product/{slug}` kèm sản phẩm liên quan.
 - Giỏ hàng, thanh toán, "Đơn hàng của tôi" (huỷ đơn khi đang chờ xác nhận).
 - Trang hồ sơ: sửa thông tin cá nhân, đổi mật khẩu.
+-AI Chatbot (/api/Chatbot): hỏi tư vấn linh kiện và cấu hình máy tính
+qua Gemini 2.5 Flash — không cần rời khỏi trang web.
 
 **Quản trị** (`/Admin`)
 - Bảng điều khiển, quản lý sản phẩm (CRUD), đơn hàng (đổi trạng thái), doanh thu,
@@ -67,6 +69,8 @@ dotnet ef database update
 # 4. Chạy
 dotnet run
 ```
+# (nếu dùng chatbot) Đặt Gemini API key qua user-secrets
+dotnet user-secrets set "Gemini:ApiKey" "<your-gemini-api-key>"
 
 ## Kiểm thử
 
