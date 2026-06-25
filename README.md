@@ -13,12 +13,14 @@ Razor Pages + Entity Framework Core (SQL Server)**, chạy trên **.NET 10**.
 Phân lớp rõ ràng:
 
 ```
-Models/      # Thực thể EF (User, Category, Product, Order, OrderItem, CartItem) + Enums
+Models/      # Thực thể EF (User, Category, Product, Order, OrderItem, CartItem, ChatRequest) + Enums
 Data/        # AppDbContext, SeedData (admin + sản phẩm), Migrations
 Services/    # Nghiệp vụ qua interface + DI:
              #   IAuthService   - đăng ký / đăng nhập / đổi mật khẩu / hồ sơ
              #   ICartService   - giỏ hàng + đặt hàng (CheckoutAsync)
              #   IOrderService  - huỷ đơn + hoàn kho (dùng chung khách & admin)
+Controllers/ # API controllers:
+             #   ChatbotController - POST /api/Chatbot (Gemini 2.5 Flash, IHttpClientFactory)
 Pages/       # Razor Pages — storefront
   Admin/     #   Khu quản trị (khoá theo policy "AdminOnly")
 wwwroot/     # CSS / JS / ảnh / fonts
@@ -31,8 +33,7 @@ wwwroot/     # CSS / JS / ảnh / fonts
 - Chi tiết sản phẩm `/product/{slug}` kèm sản phẩm liên quan.
 - Giỏ hàng, thanh toán, "Đơn hàng của tôi" (huỷ đơn khi đang chờ xác nhận).
 - Trang hồ sơ: sửa thông tin cá nhân, đổi mật khẩu.
--AI Chatbot (/api/Chatbot): hỏi tư vấn linh kiện và cấu hình máy tính
-qua Gemini 2.5 Flash — không cần rời khỏi trang web.
+- **Chatbot AI** tư vấn linh kiện tích hợp Gemini 2.5 Flash (`POST /api/Chatbot`).
 
 **Quản trị** (`/Admin`)
 - Bảng điều khiển, quản lý sản phẩm (CRUD), đơn hàng (đổi trạng thái), doanh thu,
@@ -46,7 +47,8 @@ qua Gemini 2.5 Flash — không cần rời khỏi trang web.
 - **Antiforgery** tự động trên mọi form POST của Razor Pages.
 - **Chống IDOR:** trang xem đơn lọc theo người dùng đăng nhập.
 - Đặt hàng và huỷ đơn (hoàn kho) chạy trong **transaction**.
-- Không hard-code tài khoản admin — seed từ user-secrets/cấu hình.
+- Không hard-code tài khoản admin hay Gemini API key — seed từ user-secrets/cấu hình.
+- `ChatbotController` dùng **`IHttpClientFactory`** (tránh socket exhaustion).
 
 ## Công nghệ
 
@@ -54,6 +56,7 @@ qua Gemini 2.5 Flash — không cần rời khỏi trang web.
 - Entity Framework Core 10 (SQL Server)
 - Xác thực Cookie + phân quyền theo Role
 - BCrypt.Net-Next
+- Gemini 2.5 Flash API (chatbot)
 
 ## Bắt đầu nhanh
 
@@ -61,16 +64,15 @@ Xem chi tiết trong [`SETUP.md`](SETUP.md). Tóm tắt:
 
 ```bash
 # 1. Cấu hình chuỗi kết nối trong appsettings.json (ConnectionStrings:Default)
-# 2. Đặt tài khoản admin qua user-secrets
+# 2. Đặt tài khoản admin và Gemini API key qua user-secrets
 dotnet user-secrets set "Seed:Admin:Email"    "admin@tklcomputer.vn"
 dotnet user-secrets set "Seed:Admin:Password" "<mật-khẩu-mạnh>"
+dotnet user-secrets set "Gemini:ApiKey"       "<api-key-từ-google-ai-studio>"
 # 3. Tạo CSDL từ migration
 dotnet ef database update
 # 4. Chạy
 dotnet run
 ```
-# (nếu dùng chatbot) Đặt Gemini API key qua user-secrets
-dotnet user-secrets set "Gemini:ApiKey" "<your-gemini-api-key>"
 
 ## Kiểm thử
 
@@ -78,8 +80,9 @@ dotnet user-secrets set "Gemini:ApiKey" "<your-gemini-api-key>"
 dotnet test tests/may_tinh_sucvn.Tests.csproj
 ```
 
-Test dùng **SQLite in-memory** (provider quan hệ, hỗ trợ transaction) phủ các luồng
-lõi: xác thực, tính giá khi đặt hàng (chống sửa giá), trừ/hoàn kho, huỷ đơn.
+Test dùng **SQLite in-memory** (provider quan hệ, hỗ trợ transaction) và **Moq**
+phủ các luồng lõi: xác thực, tính giá khi đặt hàng (chống sửa giá), trừ/hoàn kho,
+huỷ đơn, và ChatbotController (mock Gemini API).
 
 ## Giấy phép
 

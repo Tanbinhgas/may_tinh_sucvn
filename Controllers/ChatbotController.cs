@@ -1,102 +1,104 @@
 using Microsoft.AspNetCore.Mvc;
+using may_tinh_sucvn.Models;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
 namespace may_tinh_sucvn.Controllers;
 
+/// <summary>
+/// API endpoint tư vấn linh kiện qua Gemini 2.5 Flash.
+/// HttpClient được inject qua IHttpClientFactory (đăng ký bằng AddHttpClient trong Program.cs)
+/// — tránh socket exhaustion của new HttpClient() antipattern.
+/// API key đọc từ cấu hình (user-secrets / env), không được hard-code hay commit.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class ChatbotController : ControllerBase
 {
-    private readonly HttpClient _httpClient;
+    private readonly IHttpClientFactory _httpClientFactory;
     private readonly IConfiguration _config;
+    private readonly ILogger<ChatbotController> _logger;
 
-    public ChatbotController(IConfiguration config)
+    public ChatbotController(IHttpClientFactory httpClientFactory,
+                             IConfiguration config,
+                             ILogger<ChatbotController> logger)
     {
+        _httpClientFactory = httpClientFactory;
         _config = config;
-        _httpClient = new HttpClient();
-        _httpClient.Timeout = TimeSpan.FromSeconds(30);
+        _logger = logger;
     }
 
     [HttpPost]
-    public async Task<IActionResult> Chat([FromBody] ChatRequest request)
+    public async Task<IActionResult> Ask([FromBody] ChatRequest request)
     {
-        try
+        if (string.IsNullOrWhiteSpace(request?.Question))
+            return BadRequest(new { success = false, message = "Câu hỏi không được để trống." });
+
+        var apiKey = _config["Gemini:ApiKey"];
+        if (string.IsNullOrWhiteSpace(apiKey))
         {
-            var apiKey = _config["Gemini:ApiKey"];
-            
-            if (string.IsNullOrEmpty(apiKey))
-            {
-                return BadRequest(new { 
-                    success = false, 
-                    message = "Chưa cấu hình API Key Gemini" 
-                });
-            }
+            _logger.LogError("Gemini:ApiKey chưa được cấu hình.");
+            return StatusCode(503, new { success = false, message = "Chatbot chưa được cấu hình. Vui lòng thử lại sau." });
+        }
 
-            if (string.IsNullOrWhiteSpace(request.Question))
-            {
-                return BadRequest(new { 
-                    success = false, 
-                    message = "Vui lòng nhập câu hỏi." 
-                });
-            }
+        var url = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={apiKey}";
 
-            // ✅ Dùng gemini-2.5-pro (mới nhất)
-var url = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={apiKey}";
-            var payload = new
+        var body = new
+        {
+            contents = new[]
             {
-                contents = new[]
+                new
                 {
-                    new
+                    parts = new[]
                     {
-                        parts = new[]
+                        new
                         {
-                            new { text = request.Question }
+                            text = $"Bạn là trợ lý tư vấn linh kiện máy tính cho cửa hàng TKL Computer. " +
+                                   $"Hãy trả lời ngắn gọn, chính xác bằng tiếng Việt. " +
+                                   $"Câu hỏi: {request.Question}"
                         }
                     }
                 }
-            };
-
-            var json = JsonSerializer.Serialize(payload);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            
-            var response = await _httpClient.PostAsync(url, content);
-            var jsonResponse = await response.Content.ReadAsStringAsync();
-
-            if (response.IsSuccessStatusCode)
-            {
-                using var doc = JsonDocument.Parse(jsonResponse);
-                var reply = doc.RootElement
-                    .GetProperty("candidates")[0]
-                    .GetProperty("content")
-                    .GetProperty("parts")[0]
-                    .GetProperty("text")
-                    .GetString();
-
-                return Ok(new { 
-                    success = true, 
-                    reply = reply ?? "Xin lỗi, tôi không có câu trả lời." 
-                });
             }
-            else
+        };
+
+        try
+        {
+            var client = _httpClientFactory.CreateClient("Gemini");
+            client.Timeout = TimeSpan.FromSeconds(30);
+
+            var json = JsonSerializer.Serialize(body);
+            using var content = new StringContent(json, Encoding.UTF8, new MediaTypeHeaderValue("application/json"));
+            using var response = await client.PostAsync(url, content);
+
+            if (!response.IsSuccessStatusCode)
             {
-                return BadRequest(new { 
-                    success = false, 
-                    message = $"Gemini API lỗi: {jsonResponse}" 
-                });
+                var err = await response.Content.ReadAsStringAsync();
+                _logger.LogWarning("Gemini API trả về {StatusCode}: {Body}", (int)response.StatusCode, err);
+                return StatusCode(502, new { success = false, message = "Chatbot tạm thời không khả dụng." });
             }
+
+            var responseBody = await response.Content.ReadAsStringAsync();
+            using var doc = JsonDocument.Parse(responseBody);
+            var reply = doc.RootElement
+                .GetProperty("candidates")[0]
+                .GetProperty("content")
+                .GetProperty("parts")[0]
+                .GetProperty("text")
+                .GetString() ?? "Không có phản hồi.";
+
+            return Ok(new { success = true, reply });
+        }
+        catch (TaskCanceledException)
+        {
+            _logger.LogWarning("Gemini API timeout khi xử lý câu hỏi: {Question}", request.Question);
+            return StatusCode(504, new { success = false, message = "Chatbot phản hồi quá chậm. Vui lòng thử lại." });
         }
         catch (Exception ex)
         {
-            return BadRequest(new { 
-                success = false, 
-                message = $"Lỗi: {ex.Message}" 
-            });
+            _logger.LogError(ex, "Lỗi không xác định khi gọi Gemini API.");
+            return StatusCode(500, new { success = false, message = "Đã xảy ra lỗi. Vui lòng thử lại sau." });
         }
     }
-}
-
-public class ChatRequest
-{
-    public string Question { get; set; } = "";
 }
